@@ -1,31 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define TAILLEOP 10
+#include "parser.h"
 
 
 
 
-char** cut_instruction(char  string[],char rtrn[][]){
+instruction * cut_instruction(char  string[]){
 	int i=0,n=0;
 	int pos=0;
-	
-	
-	while(string[i]!='\0' || string[i]!='#'){
+	instruction *rtrn = malloc(sizeof(instruction));
+	i=0;
+	while(string[i]!='\0' && string[i]!='#'){
 		if(string[i]!=' '){
-				
 			switch(pos){
 				case 0: 
-					rtrn[0][i-n]=string[i];
+					rtrn->opcode[i-n]=string[i];
 					break;
 				case 1: 
-					rtrn[1][i-n]=string[i];
+					rtrn->op1[i-n]=string[i];
+					
 					break;
 				case 2:
-					rtrn[2][i-n]=string[i];					
+					rtrn->op2[i-n]=string[i];					
 					break;
 				case 3: 
-					rtrn[3][i-n]=string[i];
+					rtrn->op3[i-n]=string[i];
 					break;
 				default:
 					break;
@@ -33,7 +33,7 @@ char** cut_instruction(char  string[],char rtrn[][]){
 			
 		}
 		else{
-			n+=i;
+			n=i+1;
 			pos++;
 		}
 		i++;
@@ -41,8 +41,8 @@ char** cut_instruction(char  string[],char rtrn[][]){
 	return(rtrn);
 }
 int main(){
-	char rtrn[4][TAILLEOP]={{""},{""},{""},{""}};
 	
-	cut_instruction("addi ,char rtrn[][])
+	instruction *a=cut_instruction("addi 1552 $2 3#lol");
+	printf("%s\n%s\n%s\n%s\n",a->opcode,a->op1,a->op2,a->op3);
 	return 0;
 }
