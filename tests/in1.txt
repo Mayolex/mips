@@ -1,0 +1,8 @@
+ADDI $1,$0,3#mets la valeur 3 dans le registre 1
+ROTR $2,$1,1 # 0000000000000000000000000000011->1000000000000000000000000000001
+ADD $3 ,$2,$1 #..
+AND $4,$1,$2 # 0000000000000000000000000000001 dans le registre 4 
+ADDI $2, $0, 2
+ADDI $1,$0,1 
+BEQ $4,$2,1 #compare la valeur dans les registres 4 et 2
+BEQ $4,$1,1 #va à la ligne suivante si la valeur contenue dans le registre 4 est égal a 1
