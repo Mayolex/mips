@@ -8,4 +8,6 @@ struct instruction{
     char op1[TAILLEOP];
     char op2[TAILLEOP];
     char op3[TAILLEOP];
+    char type;
+    int arg_nb;
 };
