@@ -3,7 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include "parser.h"
-
+#include "moduletp4.h"
 
 
 
@@ -42,8 +42,26 @@ instruction * cut_instruction(char  string[]){
 	rtrn->arg_nb=pos;
 	return(rtrn);
 }
+int registerToInt(char reg[]){
+	int rtrn=0;
+	if(reg[0]=='$'){
+		rtrn=valeurDecimale(&reg[1]);
+	}
+	return(rtrn&31);
+}
+int immediateToInt(char im[]){
+	int rtrn=0;
+	rtrn=valeurDecimale(im)&65535;/* on s'assure de respecter les 16 bit*/
+	printf("\nhexa :%x \n",rtrn);
+	return(rtrn);
+}
+long int targetToInt(char targ[]){
+	int rtrn=0;
+	rtrn=(valeurDecimale(targ)&67108863);
+	return(rtrn);
+}
 
-void find_instruction(instruction * instr){
+void translate_instruction(instruction * instr){
 	char instrname[TAILLEOP];
 	int hex;
 	char type='u'; /* cas de base: type inconnu */
@@ -57,25 +75,36 @@ void find_instruction(instruction * instr){
 
 
 	while(!feof(instructionFile) && strcmp(instrname,instr->opcode)!=0){
-		printf("%d %s %s\n\n",strcmp(instrname,instr->opcode),instrname,instr->opcode);
 		fscanf(instructionFile,"%s %X %c",&instrname,&hex,&type);
 	}
 	printf("%s %X %c\n",instrname, hex,type);
 	fclose(instructionFile);
 	if(type=='I'){
-		rtrn=rtrn+(hex<<26);
+		rtrn+=(hex<<26);
+		rtrn+=(registerToInt(instr->op1)<<16); /* ajout de rt*/
+		rtrn+=(registerToInt(instr->op2)<<21); /* ajout de rs*/
+		rtrn+=(immediateToInt(instr->op3));/* ajout de la valeur immédiate*/
+
 	}
 	if(type=='R'){
 		rtrn=hex;
-		printf("%X",rtrn);
+		rtrn+=(registerToInt(instr->op1)<<11); /* ajout de rd*/
+		rtrn+=(registerToInt(instr->op2)<<21); /* ajout de rs*/
+		rtrn+=(registerToInt(instr->op3)<<16); /* ajout de rt*/
+
 	}
+	if(type=='J'){
+		rtrn=(hex<<26);
+		rtrn+=(targetToInt(instr->op1));/*ajout de target*/
+	}
+		printf("rtrn:%X",rtrn);
 }
 
 
 int main(){
 	
-	instruction *a=cut_instruction("ADD 1552 $2 3#lol");
-	/*printf("%s\n%s\n%s\n%s\n",a->opcode,a->op1,a->op2,a->op3);*/
-	find_instruction(a);
+	instruction *a=cut_instruction("J 67108863 #lol");
+	printf("%s\n%s\n%s\n%s\nto int: %d\n",a->opcode,a->op1,a->op2,a->op3,registerToInt(a->op1));
+	translate_instruction(a);
 	return 0;
 }

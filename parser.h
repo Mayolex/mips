@@ -1,7 +1,6 @@
-
+#include "moduletp4.h"
 #define TAILLEOP 10
 
-char* instruction_to_hexa(char * string);
 typedef struct instruction instruction;
 struct instruction{
     char opcode[TAILLEOP];
@@ -11,3 +10,10 @@ struct instruction{
     char type;
     int arg_nb;
 };
+
+
+char* instruction_to_hexa(char * string);
+int registerToInt(char reg[]);
+int immediateToInt(char reg[]);
+long int targetToInt(char targ[]);
+void translate_instruction(instruction * instr);
