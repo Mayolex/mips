@@ -13,7 +13,7 @@ instruction * cut_instruction(char  string[]){
 	instruction *rtrn = malloc(sizeof(instruction));
 	i=0;
 	while(string[i]!='\0' && string[i]!='#'){
-		if(string[i]!=' '){
+		if(string[i]!=' ' && string[i]!=','){
 			switch(pos){
 				case 0: 
 					rtrn->opcode[i-n]=string[i];
@@ -103,7 +103,7 @@ void translate_instruction(instruction * instr){
 
 int main(){
 	
-	instruction *a=cut_instruction("J 67108863 #lol");
+	instruction *a=cut_instruction("ADDI $12 $18 28 #lol");
 	printf("%s\n%s\n%s\n%s\nto int: %d\n",a->opcode,a->op1,a->op2,a->op3,registerToInt(a->op1));
 	translate_instruction(a);
 	return 0;
