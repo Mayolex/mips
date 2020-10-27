@@ -12,8 +12,9 @@ struct instruction{
 };
 
 
+instruction * cut_instruction(char  string[]);
 char* instruction_to_hexa(char * string);
 int registerToInt(char reg[]);
 int immediateToInt(char reg[]);
 long int targetToInt(char targ[]);
-void translate_instruction(instruction * instr);
+void translate_instruction(instruction * instr, char* instructFile,FILE* fichierEntree, FILE* fichierSortie);
