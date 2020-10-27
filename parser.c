@@ -63,7 +63,7 @@ Retourne l'entier
 int immediateToInt(char im[]){
 	int rtrn=0;
 	rtrn=valeurDecimale(im)&65535;/*on s'assure de respecter les 16 bits*/
-	printf("\nhexa :%x \n",rtrn);
+	/*printf("\nhexa :%x \n",rtrn);*/
 	return(rtrn);
 }
 /*
@@ -97,11 +97,9 @@ void translate_instruction(instruction * instr, char* instrFile,FILE* fichierEnt
 	while(!feof(instructFile) && strcmp(instrname,instr->opcode)!=0){
 		fscanf(instructFile,"%s %X %c",&instrname,&hex,&type);
 	}
-	printf("%s %X %c\n",instrname, hex,type);
+	/*printf("%s %X %c\n",instrname, hex,type);*/
 	fclose(instructFile);
-	/*
-	pas sûr que ta suite fonctionne : peut-être mettre des &= plutôt que des += si j'ai bien compris
-	*/
+	
 	if(type=='I'){
 		rtrn+=(hex<<26);
 		rtrn+=(registerToInt(instr->op1)<<16); /* ajout de rt*/
@@ -118,7 +116,7 @@ void translate_instruction(instruction * instr, char* instrFile,FILE* fichierEnt
 		rtrn=(hex<<26);
 		rtrn+=(targetToInt(instr->op1));/*ajout de target*/
 	}
-	printf("rtrn:%X\n",rtrn);
+	/*printf("rtrn:%X\n",rtrn);*/
 	fprintf(fichierSortie,"%X\n", rtrn);
 }
 
