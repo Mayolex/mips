@@ -12,4 +12,24 @@ annexe, il n'y avait pas de difficulté majeure. Ensuite, nous
 avons créé la fonction ecrit_fichier puis le début de 
 lis_fichier.
 
-sénace 2 :
+séance 2 + séance 3 :
+Les deux séances étaient consécutives. Pendant cette double 
+séance, nous avons fini d'écrire la fonction lis_fichier et 
+avons créé transformeTotal pour simplifier le main. Après test 
+du programme, nous obtenons un résultat, mais pas cohérent. 
+Ainsi débuta la longue phase de debogue. Les instructions 
+hexadécimales ne correspondent pas à celles attendues. En 
+modifiant la fonction transformeTotal, le résultat maintenant 
+obtenu est un mélange de fichiers ouverts. Après beaucoup 
+d'incompréhension, nous découvrons que de ne pas fermer les 
+fichiers est une solution. Toutefois soucieux des fuites 
+mémoires, nous préférons trouver un moyen d'utiliser 
+correctement la lecture des fichiers.En parallèle, nous avons 
+commencé la création du module qui gère la mémoire en 
+déclarant une structure pour les registres et une structure 
+pour la mémoire.
+
+séance 4 :
+Pour cette séance, nous nous concentrons sur la gestion de la 
+mémoire. Nous voulions d'abord utiliser une pile pour gérer la 
+mémoire non volatile.
