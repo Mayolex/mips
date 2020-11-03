@@ -124,7 +124,7 @@ Ecrit le nombre dans le fichier
 Ne retourne rien
 */
 void ecrit_fichier(char *nomFichier, long unsigned int aEcrire){
-	FILE *fichier=fopen(nomFichier,"w");
+	FILE *fichier=fopen(nomFichier,"a");
 	if(fichier==NULL){
 		perror("l'ouverture du fichier d'écriture a échoué");
 		exit(0);
@@ -134,14 +134,12 @@ void ecrit_fichier(char *nomFichier, long unsigned int aEcrire){
 }
 
 /*
-Reçoit un fichier à lire
+Reçoit un fichier à lire et une chaîne de caractère où stocker
 Lit une ligne du fichier
 Retourne ce qui a été lu du fichier
 */
-char *lis_fichier(FILE *readFile){
-	char instr[100];//une instruction sans commentaire ne sera pas plus grande que 99 caractères
+void lis_fichier(FILE *readFile, char *instr){
 	fgets(instr,100,readFile);
-	return(instr);
 }
 
 /*
@@ -150,16 +148,18 @@ Traduit les instructions du fichier à lire en hexa dans le fichier où écrire
 Ne retourne rien
 */
 void transformeTotal(char *fichierALire, char *fichierAEcrire){
-	char *instr;
+	char instr[100];
 	long unsigned int aEcrire;
 	instruction *a;
+	remove(fichierAEcrire);
 	FILE *readFile=fopen(fichierALire,"r");
     if(readFile == NULL){/*test ouverture fichier*/
         perror("erreur a l'ouverture du fichier à lire : il n'existe peut-être pas\n");
         exit(1);
     }
 	while(!feof(readFile)){
-        instr=lis_fichier(readFile);
+        lis_fichier(readFile,instr);
+		mettreEnMajuscule(instr);
         a = cut_instruction(instr);
         aEcrire = translate_instruction(a,"instructiontohex.txt");
         ecrit_fichier(fichierAEcrire,aEcrire);
