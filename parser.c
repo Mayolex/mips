@@ -18,7 +18,7 @@ instruction * cut_instruction(char  string[]){
 		if(string[i]!=' ' && string[i]!=','){
 			switch(pos){
 				case 0: 
-					rtrn->opcode[i]=string[i];
+					rtrn->opcode[i-n]=string[i];
 					break;
 				case 1: 
 					rtrn->op1[i-n]=string[i];
@@ -143,7 +143,24 @@ Lit une ligne du fichier
 Retourne ce qui a été lu du fichier
 */
 void lis_fichier(FILE *readFile, char *instr){
-	fgets(instr,99,readFile);
+	fgets(instr,100,readFile);
+}
+
+/*
+Reçoit une chaîne de caractères
+Supprime les espaces ou retours à la ligne dans le début de la chaîne
+Renvoit la chaîne modifiée
+*/
+char *mange_blanc(char *instr){
+	int i=0;
+	while(instr[0]==' ' || instr[0]=='\n'){
+		while(instr[i]!='\0'){
+			instr[i]=instr[i+1];
+			i++;
+		}
+		instr[i]='\0';
+	}
+	return(instr);
 }
 
 /*
@@ -165,6 +182,7 @@ void transformeTotal(char *fichierALire, char *fichierAEcrire){
     }
 	while(!feof(readFile)){
         lis_fichier(readFile,instr);
+		mange_blanc(instr);
 		mettreEnMajuscule(instr);
         a = cut_instruction(instr);
 		printf("instruction coupé : opcode: %s op1:%s op2: %s op3: %s  \n",a->opcode,a->op1,a->op2,a->op3);
