@@ -40,7 +40,6 @@ instruction * cut_instruction(char  string[]){
 		}
 		i++;
 	}
-	rtrn->arg_nb=pos;
 	return(rtrn);
 }
 /*
