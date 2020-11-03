@@ -1,0 +1,15 @@
+séance 1 :
+Après avoir pris connaissance du sujet et des spécifications 
+du jeu d'instruction MIPS, nous avons commencé à écrire les 
+programmes de test. Après ça, nous avons eu le temps de 
+commencer la fonction cut_instruction. Nous avons choisi 
+l'espace comme séparateur entre les différents éléments d'une 
+instruction. Nous nous sommes arrêté là pour la première 
+séance, mais avons continué chez nous en complétant le parseur
+avec les fonctions registerToInt, immediateToInt, targetToInt,
+translate_instruction dans un premier temps. Grâce au fichier 
+annexe, il n'y avait pas de difficulté majeure. Ensuite, nous 
+avons créé la fonction ecrit_fichier puis le début de 
+lis_fichier.
+
+sénace 2 :
