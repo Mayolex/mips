@@ -83,7 +83,7 @@ Traduit l'instruction complète en fonction de son type en hexadécimal
 Ecrit dans un fichier de sortie l'instruction reconstituée traduite
 Ne retourne rien
 */
-void translate_instruction(instruction * instr, char* instrFile,FILE* fichierEntree, FILE* fichierSortie){
+long unsigned int translate_instruction(instruction * instr, char* instrFile){
 	char instrname[TAILLEOP];
 	int hex;
 	char type='u'; /* cas de base: type inconnu */
@@ -97,7 +97,6 @@ void translate_instruction(instruction * instr, char* instrFile,FILE* fichierEnt
 	while(!feof(instructFile) && strcmp(instrname,instr->opcode)!=0){
 		fscanf(instructFile,"%s %X %c",&instrname,&hex,&type);
 	}
-	/*printf("%s %X %c\n",instrname, hex,type);*/
 	fclose(instructFile);
 	
 	if(type=='I'){
@@ -116,7 +115,55 @@ void translate_instruction(instruction * instr, char* instrFile,FILE* fichierEnt
 		rtrn=(hex<<26);
 		rtrn+=(targetToInt(instr->op1));/*ajout de target*/
 	}
-	/*printf("rtrn:%X\n",rtrn);*/
-	fprintf(fichierSortie,"%X\n", rtrn);
+	return (rtrn);
+}
+
+/*
+Reçoit un nom de fichier et un nombre
+Ecrit le nombre dans le fichier
+Ne retourne rien
+*/
+void ecrit_fichier(char *nomFichier, long unsigned int aEcrire){
+	FILE *fichier=fopen(nomFichier,"w");
+	if(fichier==NULL){
+		perror("l'ouverture du fichier d'écriture a échoué");
+		exit(0);
+	}
+	fprintf(fichier,"%X\n",aEcrire);
+	fclose(fichier);
+}
+
+/*
+Reçoit un fichier à lire
+Lit une ligne du fichier
+Retourne ce qui a été lu du fichier
+*/
+char *lis_fichier(FILE *readFile){
+	char instr[100];//une instruction sans commentaire ne sera pas plus grande que 99 caractères
+	fgets(instr,100,readFile);
+	return(instr);
+}
+
+/*
+Reçoit un fichier où lire et un fichier où écrire
+Traduit les instructions du fichier à lire en hexa dans le fichier où écrire
+Ne retourne rien
+*/
+void transformeTotal(char *fichierALire, char *fichierAEcrire){
+	char *instr;
+	long unsigned int aEcrire;
+	instruction *a;
+	FILE *readFile=fopen(fichierALire,"r");
+    if(readFile == NULL){/*test ouverture fichier*/
+        perror("erreur a l'ouverture du fichier à lire : il n'existe peut-être pas\n");
+        exit(1);
+    }
+	while(!feof(readFile)){
+        instr=lis_fichier(readFile);
+        a = cut_instruction(instr);
+        aEcrire = translate_instruction(a,"instructiontohex.txt");
+        ecrit_fichier(fichierAEcrire,aEcrire);
+	}
+	fclose(readFile);
 }
 

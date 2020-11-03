@@ -17,4 +17,7 @@ char* instruction_to_hexa(char * string);
 int registerToInt(char reg[]);
 int immediateToInt(char reg[]);
 long int targetToInt(char targ[]);
-void translate_instruction(instruction * instr, char* instructFile,FILE* fichierEntree, FILE* fichierSortie);
+long unsigned int translate_instruction(instruction * instr, char* instrFile);
+void ecrit_fichier(char *nomFichier, long unsigned int aEcrire);
+char *lis_fichier(FILE *readFile);
+void transformeTotal(char *fichierALire, char *fichierAEcrire);

@@ -10,26 +10,8 @@
 tests/in2.txt->traduction->out_hex.txt
 */
 int main(int argc, char *argv[]){
-    char instr[100];/*="ADDI $1,$0,3 #commentaire";*/
     if(argc==3){
-        FILE *readFile=fopen(argv[1],"r");
-        if(readFile == NULL){/*test ouverture fichier*/
-            perror("erreur a l'ouverture du fichier à lire : il n'existe peut-être pas\n");
-            exit(1);
-        }
-        FILE *writeFile=fopen(argv[2], "w");
-        if(writeFile == NULL){/*test ouverture fichier*/
-            perror("erreur a l'ouverture du fichier d'écriture\n");
-            exit(1);
-        }
-        
-        fgets(instr,100,readFile);
-        /*printf("instr : %s\n",instr);*/
-        instruction *a = cut_instruction(instr);
-        /*printf("%s\n%s\n%s\n%s\nto int: %d\n",a->opcode,a->op1,a->op2,a->op3,registerToInt(a->op1));*/
-        translate_instruction(a,"instructiontohex.txt",readFile,writeFile);
-        fclose(readFile);
-        fclose(writeFile);
+        transformeTotal(argv[1],argv[2]);
     }
     else{
         printf("Erreur dans les options\nEssayez quelque chose de la forme :\n        ./exe [nom du fichier a lire] [nom du fichier où écrire]\n");
