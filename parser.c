@@ -14,9 +14,9 @@ Retourne les chaînes de caractèeres contenant l'opcode et les opérandes dans 
 instruction * cut_instruction(char  string[]){
 	int i=0,n=0,pos=0;
 	instruction *rtrn = malloc(sizeof(instruction));
-	while(string[i]!='\0' && string[i]!='#' && string[i]!='\n'){
-		if(string[i]!=' ' && string[i]!=','){
-			switch(pos){
+	while(string[i]!='\0' && string[i]!='#' && string[i]!='\n'){//conditions d'arrêt de lecture de la ligne
+		if(string[i]!=' ' && string[i]!=','){//séparateurs
+			switch(pos){//on sépare les éléments de l'instruction
 				case 0: 
 					rtrn->opcode[i-n]=string[i];
 					break;
@@ -62,7 +62,6 @@ Retourne l'entier
 int immediateToInt(char im[]){
 	int rtrn=0;
 	rtrn=valeurDecimale(im)&65535;/*on s'assure de respecter les 16 bits*/
-	/*printf("\nhexa :%x \n",rtrn);*/
 	return(rtrn);
 }
 /*
@@ -93,11 +92,11 @@ long unsigned int translate_instruction(instruction * instr, char* instrFile){
         perror("erreur a l'ouverture du fichier à lire : il n'existe peut-être pas\n");
         exit(1);
     }
-	while(!feof(instructFile) && strcmp(instrname,instr->opcode)!=0){
+	while(!feof(instructFile) && strcmp(instrname,instr->opcode)!=0){//on cherche le bon opcode dans la table de traduction
 		fscanf(instructFile,"%s %X %c",&instrname,&hex,&type);
 	}
-	//fclose(instructFile);
 	
+	//on attribue l'espace de chaque opérande dans l'instruction en fonction de son type
 	if(type=='I'){
 		rtrn+=(hex<<26);
 		rtrn+=(registerToInt(instr->op1)<<16); // ajout de rt
@@ -129,8 +128,8 @@ void ecrit_fichier(char *nomFichier, long unsigned int *instrliste,int max){
 		perror("l'ouverture du fichier d'écriture a échoué");
 		exit(0);
 	}
-	while(i<=max){
-		fprintf(fichier,"%X\n",instrliste[i]);
+	while(i<max){
+		fprintf(fichier,"%X\n",instrliste[i]);//on écrit toutes les instructions traduites stockées dans le tableau
 		i++;
 	}
 	fclose(fichier);
@@ -141,8 +140,8 @@ Reçoit un fichier à lire et une chaîne de caractère où stocker
 Lit une ligne du fichier
 Retourne ce qui a été lu du fichier
 */
-void lis_fichier(FILE *readFile, char *instr){
-	fgets(instr,100,readFile);
+void lit_fichier(FILE *readFile, char *instr){
+	fgets(instr,100,readFile);//on lit le minimum entre 100 caractères et une ligne du fichier
 }
 
 /*
@@ -154,7 +153,7 @@ char *mange_blanc(char *instr){
 	int i=0;
 	while(instr[0]==' ' || instr[0]=='\n'){
 		while(instr[i]!='\0'){
-			instr[i]=instr[i+1];
+			instr[i]=instr[i+1];//on décale toute la chaîne en avant
 			i++;
 		}
 		instr[i]='\0';
@@ -179,8 +178,10 @@ void transformeTotal(char *fichierALire, char *fichierAEcrire){
         perror("erreur a l'ouverture du fichier à lire : il n'existe peut-être pas\n");
         exit(1);
     }
+
+	//on effectue les étapes de la transformation dans l'ordre
 	while(!feof(readFile)){
-        lis_fichier(readFile,instr);
+        lit_fichier(readFile,instr);
 		mange_blanc(instr);
 		mettreEnMajuscule(instr);
         a = cut_instruction(instr);
@@ -191,7 +192,7 @@ void transformeTotal(char *fichierALire, char *fichierAEcrire){
 		i++;
 	}
 	fclose(readFile);
-	ecrit_fichier(fichierAEcrire,instrliste,i-1);
+	ecrit_fichier(fichierAEcrire,instrliste,i);
 	
 }
 
