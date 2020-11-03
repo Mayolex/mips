@@ -18,6 +18,6 @@ int registerToInt(char reg[]);
 int immediateToInt(char reg[]);
 long int targetToInt(char targ[]);
 long unsigned int translate_instruction(instruction * instr, char* instrFile);
-void ecrit_fichier(char *nomFichier, long unsigned int aEcrire);
+void ecrit_fichier(char *nomFichier, long unsigned int *instrliste,int max);
 void lis_fichier(FILE *readFile, char *instr);
 void transformeTotal(char *fichierALire, char *fichierAEcrire);

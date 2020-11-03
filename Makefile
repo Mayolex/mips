@@ -2,8 +2,7 @@ all:parser.o moduletp4.o main.o
 	gcc -o exe moduletp4.o parser.o main.o -lm
 	rm *.o
 	./exe tests/in2.txt out_hex.txt
-	cat tests/in2.txt
-	cat out_hex.txt
+	
 
 parser.o:moduletp4.h parser.h
 	gcc -c parser.c

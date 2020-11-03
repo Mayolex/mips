@@ -14,7 +14,7 @@ Retourne les chaînes de caractèeres contenant l'opcode et les opérandes dans 
 instruction * cut_instruction(char  string[]){
 	int i=0,n=0,pos=0;
 	instruction *rtrn = malloc(sizeof(instruction));
-	while(string[i]!='\0' && string[i]!='#'){
+	while(string[i]!='\0' && string[i]!='#' && string[i]!='\n'){
 		if(string[i]!=' ' && string[i]!=','){
 			switch(pos){
 				case 0: 
@@ -97,23 +97,23 @@ long unsigned int translate_instruction(instruction * instr, char* instrFile){
 	while(!feof(instructFile) && strcmp(instrname,instr->opcode)!=0){
 		fscanf(instructFile,"%s %X %c",&instrname,&hex,&type);
 	}
-	fclose(instructFile);
+	//fclose(instructFile);
 	
 	if(type=='I'){
 		rtrn+=(hex<<26);
-		rtrn+=(registerToInt(instr->op1)<<16); /* ajout de rt*/
-		rtrn+=(registerToInt(instr->op2)<<21); /* ajout de rs*/
-		rtrn+=(immediateToInt(instr->op3));/* ajout de la valeur immédiate*/
+		rtrn+=(registerToInt(instr->op1)<<16); // ajout de rt
+		rtrn+=(registerToInt(instr->op2)<<21); // ajout de rs
+		rtrn+=(immediateToInt(instr->op3));// ajout de la valeur immédiate
 	}
 	if(type=='R'){
 		rtrn=hex;
-		rtrn+=(registerToInt(instr->op1)<<11); /* ajout de rd*/
-		rtrn+=(registerToInt(instr->op2)<<21); /* ajout de rs*/
-		rtrn+=(registerToInt(instr->op3)<<16); /* ajout de rt*/
+		rtrn+=(registerToInt(instr->op1)<<11); // ajout de rd
+		rtrn+=(registerToInt(instr->op2)<<21); // ajout de rs
+		rtrn+=(registerToInt(instr->op3)<<16); // ajout de rt
 	}
 	if(type=='J'){
 		rtrn=(hex<<26);
-		rtrn+=(targetToInt(instr->op1));/*ajout de target*/
+		rtrn+=(targetToInt(instr->op1));//ajout de target
 	}
 	return (rtrn);
 }
@@ -123,13 +123,17 @@ Reçoit un nom de fichier et un nombre
 Ecrit le nombre dans le fichier
 Ne retourne rien
 */
-void ecrit_fichier(char *nomFichier, long unsigned int aEcrire){
+void ecrit_fichier(char *nomFichier, long unsigned int *instrliste,int max){
+	int i=0;
 	FILE *fichier=fopen(nomFichier,"a");
 	if(fichier==NULL){
 		perror("l'ouverture du fichier d'écriture a échoué");
 		exit(0);
 	}
-	fprintf(fichier,"%X\n",aEcrire);
+	while(i<=max){
+		fprintf(fichier,"%X\n",instrliste[i]);
+		i++;
+	}
 	fclose(fichier);
 }
 
@@ -139,7 +143,7 @@ Lit une ligne du fichier
 Retourne ce qui a été lu du fichier
 */
 void lis_fichier(FILE *readFile, char *instr){
-	fgets(instr,100,readFile);
+	fgets(instr,99,readFile);
 }
 
 /*
@@ -148,6 +152,8 @@ Traduit les instructions du fichier à lire en hexa dans le fichier où écrire
 Ne retourne rien
 */
 void transformeTotal(char *fichierALire, char *fichierAEcrire){
+	int i=0;
+	long unsigned int instrliste[100];
 	char instr[100];
 	long unsigned int aEcrire;
 	instruction *a;
@@ -161,9 +167,14 @@ void transformeTotal(char *fichierALire, char *fichierAEcrire){
         lis_fichier(readFile,instr);
 		mettreEnMajuscule(instr);
         a = cut_instruction(instr);
+		printf("instruction coupé : opcode: %s op1:%s op2: %s op3: %s  \n",a->opcode,a->op1,a->op2,a->op3);
         aEcrire = translate_instruction(a,"instructiontohex.txt");
-        ecrit_fichier(fichierAEcrire,aEcrire);
+		instrliste[i]=aEcrire;
+		printf("aecrire:%x\n\n",instrliste[i]);
+		i++;
 	}
 	fclose(readFile);
+	ecrit_fichier(fichierAEcrire,instrliste,i-1);
+	
 }
 
