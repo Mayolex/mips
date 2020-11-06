@@ -7,6 +7,9 @@
 void lw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int indrt, short int offset){
     if(indrt<32){
                 reg_struct->registers[indrt]=mem_struct->memory[reg_struct->registers[indbase]+offset];
+                reg_struct->registers[indrt]+=mem_struct->memory[reg_struct->registers[indbase]+offset+1]<<8;
+                reg_struct->registers[indrt]+=mem_struct->memory[reg_struct->registers[indbase]+offset+2]<<16;
+                reg_struct->registers[indrt]+=mem_struct->memory[reg_struct->registers[indbase]+offset+3]<<24;
 
     }
   
@@ -14,7 +17,20 @@ void lw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int i
 
 void sw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int indrt, short int offset){
     if(indrt<32){
-        mem_struct->memory[reg_struct->registers[indbase]+offset]=reg_struct->registers[indrt];
+        mem_struct->memory[reg_struct->registers[indbase]+offset]=reg_struct->registers[indrt]&0xFF;
+        mem_struct->memory[reg_struct->registers[indbase]+offset+1]=((reg_struct->registers[indrt])>>8)&0xFF;
+        mem_struct->memory[reg_struct->registers[indbase]+offset+2]=((reg_struct->registers[indrt])>>16)&0xFF;
+        mem_struct->memory[reg_struct->registers[indbase]+offset+3]=((reg_struct->registers[indrt])>>24)&0xFF;
     }
 }
 
+/*int main(){
+    memory_struct mem;
+    register_struct regs;
+    regs.registers[0]=32000;
+    regs.registers[1]=15;//contient l'adresse
+    sw(&mem,&regs,1,0,1);
+    lw(&mem,&regs,1,2,1);
+    printf("%d",regs.registers[2]);
+    return (0);
+}*/

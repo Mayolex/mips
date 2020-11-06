@@ -1,4 +1,5 @@
 #include "moduletp4.h"
+#include "memory.h"
 #define TAILLEOP 10
 
 typedef struct instruction instruction;

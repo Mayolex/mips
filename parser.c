@@ -93,7 +93,7 @@ long unsigned int translate_instruction(instruction * instr, char* instrFile){
         exit(1);
     }
 	while(!feof(instructFile) && strcmp(instrname,instr->opcode)!=0){//on cherche le bon opcode dans la table de traduction
-		fscanf(instructFile,"%s %X %c",&instrname,&hex,&type);
+		fscanf(instructFile,"%s %X %c %d",&instrname,&hex,&type);
 	}
 	
 	//on attribue l'espace de chaque opérande dans l'instruction en fonction de son type
