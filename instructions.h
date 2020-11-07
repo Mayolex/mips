@@ -1,4 +1,6 @@
-#include "parser.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "memory.h"
 typedef struct numinstruction numinstruction;
 struct numinstruction{
     int op; //voir ligne dans instructiontohex.txt
@@ -11,4 +13,4 @@ struct numinstruction{
 };
 
 /* renvoi une instruction depuis une instruction stocké en mémoire a l'adresse donnée */
-numinstruction readinstr(unsigned int addr,memory_struct *mem);
+numinstruction *readinstr(unsigned int addr,memory_struct *mem);

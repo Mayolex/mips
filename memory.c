@@ -23,6 +23,15 @@ void sw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int i
         mem_struct->memory[reg_struct->registers[indbase]+offset+3]=((reg_struct->registers[indrt])>>24)&0xFF;
     }
 }
+int rw(memory_struct *mem_struct,unsigned int addr){
+    int rtrn=0;
+    rtrn=mem_struct->memory[addr];
+    rtrn+=mem_struct->memory[addr+1]<<8;
+    rtrn+=mem_struct->memory[addr+2]<<16;
+    rtrn+=mem_struct->memory[addr+3]<<24;
+    return(rtrn);
+}
+
 
 /*int main(){
     memory_struct mem;

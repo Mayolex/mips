@@ -14,3 +14,4 @@ struct register_struct{
 /*indbase: indice du registre adresse dans la mémoire  indrt : indice du registre*/
 void lw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int indrt, short int offset);
 void sw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int indrt, short int offset);
+int rw(memory_struct *mem_struct,unsigned int addr);
