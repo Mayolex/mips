@@ -31,6 +31,12 @@ int rw(memory_struct *mem_struct,unsigned int addr){
     rtrn+=mem_struct->memory[addr+3]<<24;
     return(rtrn);
 }
+void wr(register_struct *reg_struct,int reg,unsigned int value){
+    if(reg!=0 && reg!=26 && reg!=27 &&reg!=30){
+        reg_struct->registers[reg]=value;
+    }
+
+}
 
 void printRegisters(register_struct *reg_struct){
     int i = 0;
