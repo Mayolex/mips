@@ -22,22 +22,23 @@ tests/in2.txt->traduction->out_hex.txt
 int main(){
 	long unsigned int kappa;
 	instruction *lul=cut_instruction("LW $2 0($2)");
-	kappa=translate_instruction(lul,"instructiontohex.txt");
     memory_struct mem;
     register_struct regs;
-    regs.registers[1]=0; //charge l'adresse 0 
-    regs.registers[0]=kappa;
-    sw(&mem,&regs,1,0,0); //charge l'instruction a l'adresse 0
+    numinstruction *instr;
 
-    numinstruction *instr=readinstr(0,&mem);
+	kappa=translate_instruction(lul,"instructiontohex.txt");
+    regs.registers[0]=kappa;
+    regs.registers[1]=0; //charge l'adresse 0 
     regs.registers[2]=4;
     regs.registers[3]=4;
     regs.registers[7]=8;
-    sw(&mem,&regs,2,3,0);
     regs.registers[GP]=8;
     regs.registers[HI]=0;
     regs.registers[LO]=0;
     regs.registers[RA]=16;
+    instr=readinstr(0,&mem);
+    sw(&mem,&regs,1,0,0); //charge l'instruction a l'adresse 0
+    sw(&mem,&regs,2,3,0);
     operation(instr,&regs,&mem);
     printRegisters(&regs);
     return(0);

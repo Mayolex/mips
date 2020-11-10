@@ -1,9 +1,10 @@
 #include "instructions.h"
 
-
+/*
+On transforme une instruction en numinstruction
+*/
 numinstruction *readinstr(unsigned int addr,memory_struct *mem){
     unsigned int valinstr = rw(mem,addr);
-    printf("valinstr: %X  ",valinstr>>26);
     numinstruction *instr=malloc(sizeof(numinstruction));
     if(valinstr>>26==0){//cas des instructions de type registre
         instr->op=valinstr&0x3F;
@@ -77,15 +78,40 @@ void LUI(numinstruction *lui,register_struct *reg){
 }
 void LW(numinstruction *Lw,register_struct *reg,memory_struct *mem){
     lw(mem,reg,Lw->rs,Lw->rt,Lw->immediate);
-    printf("%d %d %d",Lw->rs,Lw->rt,Lw->immediate);
 }
-/*void MFHI(numinstruction *mfhi,register_struct *reg)
-void MFLO(numinstruction *mflo,register_struct *reg)
-void MULT(numinstruction *mult,register_struct *reg)
-void NOP(numinstruction *nop,register_struct *reg)
-void OR(numinstruction *or,register_struct *reg)
-void ROTR(numinstruction *rotr,register_struct *reg)
-void SLL(numinstruction *sll,register_struct *reg)
+//fin fonctions testées
+void MFHI(numinstruction *mfhi,register_struct *reg){
+    wr(reg,mfhi->rd,reg->registers[HI]);
+}
+void MFLO(numinstruction *mflo,register_struct *reg){
+    wr(reg,mflo->rd,reg->registers[LO]);
+}
+void MULT(numinstruction *mult,register_struct *reg){
+    wr(reg,LO,(reg->registers[mult->rs]*reg->registers[mult->rt])&0x0000FFFF);
+    wr(reg,HI,(reg->registers[mult->rs]*reg->registers[mult->rt])&0xFFFF0000);
+}
+void NOP(numinstruction *nop,register_struct *reg){
+    ;//ou SLL r0 r0 0;
+}
+void OR(numinstruction *or,register_struct *reg){
+    wr(reg,or->rd,(reg->registers[or->rs] | reg->registers[or->rt]));
+}
+void ROTR(numinstruction *rotr,register_struct *reg){
+    int i=0,tmp=0;
+    while(i<rotr->sa){
+        tmp=((rotr->rt)&1)+tmp;
+        tmp*=2;
+        (rotr->rt)>>1;
+        i++;
+    }
+    (rotr->rt)>>(rotr->sa);
+    rotr->rd=(rotr->rt)|(tmp);
+}
+void SLL(numinstruction *sll,register_struct *reg){
+    (sll->rt)<<(sll->sa);
+    sll->rd=sll->rt;
+}
+/*
 void SLT(numinstruction *slt,register_struct *reg)
 void SRL(numinstruction *srl,register_struct *reg)
 void SUB(numinstruction *sub,register_struct *reg)
@@ -137,13 +163,27 @@ void operation(numinstruction *instr,register_struct *reg, memory_struct *mem){
         case 0x23://LW
             LW(instr,reg,mem);
             break;
-        /*case 0x10://MFHI
+        case 0x10://MFHI
+            MFHI(instr,reg);
+            break;
         case 0x12://MFLO
+            MFLO(instr,reg);
+            break;
         case 0x18://MULT
+            MULT(instr,reg);
+            break;
         case 0x00://NOP
+            NOP(instr,reg);
+            break;
         case 0x25://OR
-        case 0x02://ROTR
-        case 0x00://SLL
+            OR(instr,reg);
+            break;/*
+        case 0x02://ROTR//pb hexa
+            ROTR(instr,reg);
+            break;
+        case 0x00://SLL//pb hexa
+            SLL(instr,reg);
+            break;
         case 0x2A://SLT
         case 0x02://SRL
         case 0x22://SUB

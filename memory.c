@@ -3,13 +3,12 @@
 #include "memory.h"
 
 
-
 void lw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int indrt, short int offset){
     if(indrt<32){
-                reg_struct->registers[indrt]=mem_struct->memory[reg_struct->registers[indbase]+offset];
-                reg_struct->registers[indrt]+=mem_struct->memory[reg_struct->registers[indbase]+offset+1]<<8;
-                reg_struct->registers[indrt]+=mem_struct->memory[reg_struct->registers[indbase]+offset+2]<<16;
-                reg_struct->registers[indrt]+=mem_struct->memory[reg_struct->registers[indbase]+offset+3]<<24;
+        reg_struct->registers[indrt]=mem_struct->memory[reg_struct->registers[indbase]+offset];
+        reg_struct->registers[indrt]+=mem_struct->memory[reg_struct->registers[indbase]+offset+1]<<8;
+        reg_struct->registers[indrt]+=mem_struct->memory[reg_struct->registers[indbase]+offset+2]<<16;
+        reg_struct->registers[indrt]+=mem_struct->memory[reg_struct->registers[indbase]+offset+3]<<24;
 
     }
   

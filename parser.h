@@ -1,5 +1,3 @@
-
-
 #define TAILLEOP 10
 
 typedef struct instruction instruction;

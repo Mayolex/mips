@@ -204,18 +204,9 @@ void transformeTotal(char *fichierALire, char *fichierAEcrire){
 		printf("instruction coupé : opcode: %s op1:%s op2: %s op3: %s  \n",a->opcode,a->op1,a->op2,a->op3);
         aEcrire = translate_instruction(a,"instructiontohex.txt");
 		instrliste[i]=aEcrire;
-		printf("aecrire:%x\n\n",instrliste[i]);
 		i++;
 	}
 	fclose(readFile);
 	ecrit_fichier(fichierAEcrire,instrliste,i);
 	
 }
-
-/*int main(){
-	long unsigned int kappa;
-	instruction *lul=cut_instruction("ADDI $2 $0 45");
-	kappa=translate_instruction(lul,"instructiontohex.txt");
-	printf("%x",kappa);
-	return(0);
-}*/

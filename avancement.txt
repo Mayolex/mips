@@ -32,4 +32,9 @@ pour la mémoire.
 séance 4 :
 Pour cette séance, nous nous concentrons sur la gestion de la 
 mémoire. Nous voulions d'abord utiliser une pile pour gérer la 
-mémoire non volatile.
+mémoire non volatile. Finalement, nous avons opté pour un 
+tableau de char pour avoir des éléments de 1 octet.
+
+séance 5 :
+Les fonctions readinstr, lw, sw, rw, wr, printRegisters et 
+printMemory sont créées.
