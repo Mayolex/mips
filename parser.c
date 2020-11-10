@@ -119,6 +119,16 @@ long unsigned int translate_instruction(instruction * instr, char* instrFile){
 		rtrn+=(immediateToInt(instr->op2));// ajout offset
 		rtrn+=(registerToInt(instr->op3)<<21); // ajout de base
 	}
+	if(type=='D'){
+		rtrn=hex;
+		rtrn+=(registerToInt(instr->op1)<<21); // ajout de rs
+		rtrn+=(registerToInt(instr->op2)<<16); // ajout de rt
+	}
+	if(type=='L'){
+		rtrn=(hex<<26);
+		rtrn+=(registerToInt(instr->op1)<<16); // ajout de rt
+		rtrn+=(immediateToInt(instr->op2));// ajout de la valeur immédiate
+	}
 	return (rtrn);
 }
 

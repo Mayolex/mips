@@ -3,6 +3,8 @@
 #include "memory.h"
 #define LO 32
 #define HI 33
+#define GP 28
+#define RA 31
 typedef struct numinstruction numinstruction;
 struct numinstruction{
     int op; //voir ligne dans instructiontohex.txt
@@ -13,11 +15,13 @@ struct numinstruction{
     int immediate;
     int target;
     int offset;
+    int type; 
 };
 
 /* renvoit une instruction depuis une instruction stockée en mémoire à l'adresse donnée */
 numinstruction *readinstr(unsigned int addr,memory_struct *mem);
 
+void operation(numinstruction *instr,register_struct *reg, memory_struct *mem);
 
 void ADDI(numinstruction *addi,register_struct *reg);
 void AND(numinstruction *and,register_struct *reg);
@@ -30,7 +34,7 @@ void J(numinstruction *j,register_struct *reg);
 void JAL(numinstruction *jal,register_struct *reg);
 void JR(numinstruction *jr,register_struct *reg);
 void LUI(numinstruction *lui,register_struct *reg);
-void LW(numinstruction *lw,register_struct *reg);
+void LW(numinstruction *Lw,register_struct *reg,memory_struct *mem);
 void MFHI(numinstruction *mfhi,register_struct *reg);
 void MFLO(numinstruction *mflo,register_struct *reg);
 void MULT(numinstruction *mult,register_struct *reg);
