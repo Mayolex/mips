@@ -20,13 +20,13 @@ tests/in2.txt->traduction->out_hex.txt
 }*/
 
 int main(){
-    int instruction= 0x8C030000;
+    int instruction= 0x20010004;
     memory_struct mem;
     register_struct regs;
     regs.registers[1]=0; //charge l'adresse 0 
     regs.registers[0]=instruction;
     sw(&mem,&regs,1,0,0); //charge l'instruction a l'adresse 0
     numinstruction *instr=readinstr(0,&mem);
-    printf("%x",instr->op);
+    printf("%x",instr->immediate);
     return(0);
 }
