@@ -14,8 +14,8 @@ Retourne les chaînes de caractèeres contenant l'opcode et les opérandes dans 
 instruction * cut_instruction(char  string[]){
 	int i=0,n=0,pos=0;
 	instruction *rtrn = malloc(sizeof(instruction));
-	while(string[i]!='\0' && string[i]!='#' && string[i]!='\n'){//conditions d'arrêt de lecture de la ligne
-		if(string[i]!=' ' && string[i]!=','){//séparateurs
+	while(string[i]!='\0' && string[i]!='#' && string[i]!='\n' && string[i]!=')'){//conditions d'arrêt de lecture de la ligne
+		if(string[i]!=' ' && string[i]!=',' && string[i]!='('){//séparateurs
 			switch(pos){//on sépare les éléments de l'instruction
 				case 0: 
 					rtrn->opcode[i-n]=string[i];
@@ -113,6 +113,12 @@ long unsigned int translate_instruction(instruction * instr, char* instrFile){
 		rtrn=(hex<<26);
 		rtrn+=(targetToInt(instr->op1));//ajout de target
 	}
+	if(type=='M'){
+		rtrn+=(hex<<26);
+		rtrn+=(registerToInt(instr->op1)<<16); // ajout de rt
+		rtrn+=(immediateToInt(instr->op2));// ajout offset
+		rtrn+=(registerToInt(instr->op3)<<21); // ajout de base
+	}
 	return (rtrn);
 }
 
@@ -196,3 +202,10 @@ void transformeTotal(char *fichierALire, char *fichierAEcrire){
 	
 }
 
+/*int main(){
+	long unsigned int kappa;
+	instruction *lul=cut_instruction("ADDI $2 $0 45");
+	kappa=translate_instruction(lul,"instructiontohex.txt");
+	printf("%x",kappa);
+	return(0);
+}*/
