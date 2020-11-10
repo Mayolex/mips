@@ -77,7 +77,7 @@ void printMemory(memory_struct *mem){
 }
 
 
-int main(){
+/*int main(){
     register_struct regs;
     memory_struct mem;
     regs.registers[0]=32000;
@@ -85,4 +85,4 @@ int main(){
     printRegisters(&regs);
     printMemory(&mem);
     return (0);
-}
+}*/
