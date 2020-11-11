@@ -37,4 +37,13 @@ tableau de char pour avoir des éléments de 1 octet.
 
 séance 5 :
 Les fonctions readinstr, lw, sw, rw, wr, printRegisters et 
-printMemory sont créées.
+printMemory sont créées. Ensuite, nous avons commencé la fonction 
+operation. En plus des nombreuses fonctions à implémenter, le 
+principal problème était pour les instructions dont l'opcode 
+hexadécimal étaient identiques. En effet, il fallait différencier 
+ces instructions pour ne pas leur appliquer le même traitement. 
+Nous avons donc essayer de les différencier via leur type mais là 
+encore, deux instructions avaient le même opcode et le même type.
+De plus, pour certaines instructions, il fallait créer leur propre 
+type car l'organisation de l'instruction était différente des 
+autres.

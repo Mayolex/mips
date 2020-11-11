@@ -12,7 +12,7 @@ numinstruction *readinstr(unsigned int addr,memory_struct *mem){
         instr->rt=(valinstr>>16)&0x1F;
         instr->rd=(valinstr>>11)&0x1F;
         instr->sa=(valinstr>>6)&0x1F;
-        instr->type=1;
+        instr->type=2;
     }
     else if((valinstr>>26)<=3){//cas des instructions de type Jump
         instr->op=valinstr>>26;
@@ -29,8 +29,8 @@ numinstruction *readinstr(unsigned int addr,memory_struct *mem){
     return(instr);
 }
 
-void ADD(numinstruction *addi,register_struct *reg){
-    wr(reg,addi->rd,(reg->registers[addi->rs])+(reg->registers[addi->rt]));
+void ADD(numinstruction *add,register_struct *reg){
+    wr(reg,add->rd,(reg->registers[add->rs])+(reg->registers[add->rt]));
 }
 void ADDI(numinstruction *addi,register_struct *reg){
     wr(reg,addi->rt,(reg->registers[addi->rs])+(addi->immediate));
@@ -111,14 +111,33 @@ void SLL(numinstruction *sll,register_struct *reg){
     (sll->rt)<<(sll->sa);
     sll->rd=sll->rt;
 }
-/*
-void SLT(numinstruction *slt,register_struct *reg)
-void SRL(numinstruction *srl,register_struct *reg)
-void SUB(numinstruction *sub,register_struct *reg)
-void SW(numinstruction *sw,register_struct *reg)
-void SYSCALL(numinstruction *syscall,register_struct *reg)
-void XOR(numinstruction *xor,register_struct *reg)
-*/
+void SLT(numinstruction *slt,register_struct *reg){
+    if((slt->rs)<(slt->rt)){
+        wr(reg,slt->rd,1);
+    }
+    else{
+        wr(reg,slt->rd,0);
+    }
+}
+void SRL(numinstruction *srl,register_struct *reg){
+    (srl->rt)>>(srl->sa);
+    srl->rd=srl->rt;
+}
+void SUB(numinstruction *sub,register_struct *reg){
+    wr(reg,sub->rd,(reg->registers[sub->rs])-(reg->registers[sub->rt]));
+}
+void SW(numinstruction *Sw,register_struct *reg,memory_struct *mem){
+    sw(mem,reg,Sw->rs,Sw->rt,Sw->immediate);
+}
+void SYSCALL(numinstruction *syscall,register_struct *reg){
+    ;//?
+}
+void XOR(numinstruction *xor,register_struct *reg){
+    int res=(xor->rs)|(xor->rt);
+    res%=2;
+    wr(reg,xor->rd,res);
+}
+
 void operation(numinstruction *instr,register_struct *reg, memory_struct *mem){
     switch(instr->op){
         case 0x20://ADD
@@ -126,10 +145,10 @@ void operation(numinstruction *instr,register_struct *reg, memory_struct *mem){
             break;
         case 0x08://ADDI ou JR
         printf("on rentre ici %d",instr->type);
-            if(!(instr->type)){
+            if(instr->type==0){
                 ADDI(instr,reg);
             }
-            else if(instr->type){
+            else if(instr->type==1){
                 JR(instr,reg);
             }
             break;
@@ -151,8 +170,14 @@ void operation(numinstruction *instr,register_struct *reg, memory_struct *mem){
         case 0x1A://DIV
             DIV(instr,reg);
             break;
-        case 0x02://J
-            J(instr,reg);
+        case 0x02://J ou ROTR ou SRL
+            if(instr->type==1){
+                J(instr,reg);
+            }
+            else if(instr->type==2){
+                ROTR(instr,reg);
+                SRL(instr,reg);//?
+            }
             break;
         case 0x03://JAL
             JAL(instr,reg);
@@ -172,23 +197,27 @@ void operation(numinstruction *instr,register_struct *reg, memory_struct *mem){
         case 0x18://MULT
             MULT(instr,reg);
             break;
-        case 0x00://NOP
-            NOP(instr,reg);
+        case 0x00://NOP ou SLL
+            //NOP(instr,reg);
+            SLL(instr,reg);//pour un NOP, on fait un SLL sans valeur (instructions de même type)
             break;
         case 0x25://OR
             OR(instr,reg);
-            break;/*
-        case 0x02://ROTR//pb hexa
-            ROTR(instr,reg);
-            break;
-        case 0x00://SLL//pb hexa
-            SLL(instr,reg);
             break;
         case 0x2A://SLT
-        case 0x02://SRL
+            SLT(instr,reg);
+            break;
         case 0x22://SUB
+            SUB(instr,reg);
+            break;
         case 0x2B://SW
+            SW(instr,reg,mem);
+            break;
         case 0x0C://SYSCALL
-        case 0x26://XOR*/
+            SYSCALL(instr,reg);
+            break;
+        case 0x26://XOR
+            XOR(instr,reg);
+            break;
     }
 }

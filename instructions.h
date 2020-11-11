@@ -45,6 +45,6 @@ void SLL(numinstruction *sll,register_struct *reg);
 void SLT(numinstruction *slt,register_struct *reg);
 void SRL(numinstruction *srl,register_struct *reg);
 void SUB(numinstruction *sub,register_struct *reg);
-void SW(numinstruction *sw,register_struct *reg);
+void SW(numinstruction *sw,register_struct *reg,memory_struct *mem);
 void SYSCALL(numinstruction *syscall,register_struct *reg);
 void XOR(numinstruction *xor,register_struct *reg);
