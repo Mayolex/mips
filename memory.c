@@ -75,6 +75,19 @@ void printMemory(memory_struct *mem){
 
 }
 
+void init_mem(memory_struct *mem){
+    int i=0;
+    for(i=0;i<LENGH;i++){
+        mem->memory[i]='0';
+    }
+}
+
+void init_reg(register_struct *reg){
+    int i=0;
+    for(i=0;i<NBREG;i++){
+        reg->registers[i]=0;
+    }
+}
 
 /*int main(){
     register_struct regs;
