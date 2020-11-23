@@ -9,16 +9,21 @@
 /*
 tests/in2.txt->traduction->out_hex.txt
 */
-/*int main(int argc, char *argv[]){
+int main(int argc, char *argv[]){
     if(argc==3){//on vérifie le nombre d'arguments
         transformeTotal(argv[1],argv[2]);//on utilise les deuxième et troisième arguments
+    }
+    else if(argc==1){
+        
+        //operation(stepByStep(),&regs,&mem);
+        //printRegisters(&regs);
     }
     else{
         printf("Erreur dans les options\nEssayez quelque chose de la forme :\n        ./exe [nom du fichier a lire] [nom du fichier où écrire]\n");
     }
 	return 0;
-}*/
-
+}
+/*
 int main(){
 	long unsigned int kappa;
 	instruction *lul=cut_instruction("LW $2 0($2)");
@@ -42,4 +47,4 @@ int main(){
     operation(instr,&regs,&mem);
     printRegisters(&regs);
     return(0);
-}
+}*/

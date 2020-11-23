@@ -210,3 +210,15 @@ void transformeTotal(char *fichierALire, char *fichierAEcrire){
 	ecrit_fichier(fichierAEcrire,instrliste,i);
 	
 }
+
+long unsigned int stepByStepTrans(){
+	char instr[100];
+	instruction *instr_cut;
+	long unsigned int ans;
+    fscanf(stdin, "%s", &instr);
+    mange_blanc(instr);
+	mettreEnMajuscule(instr);
+	instr_cut=cut_instruction(instr);
+	ans=translate_instruction(instr_cut,"instructiontohex.txt");
+	return (ans);
+}
