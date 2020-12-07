@@ -51,7 +51,7 @@ int registerToInt(char reg[]){
 	if(reg[0]=='$'){
 		rtrn=valeurDecimale(&reg[1]);
 	}
-	printf("\nrtrn : %X\n", rtrn);
+	printf("\nrtrn : %d\n", rtrn);
 	return(rtrn&31);
 }
 /*
@@ -136,6 +136,14 @@ long unsigned int translate_instruction(instruction * instr, char* instrFile){
 		printf("\nopcode : %s\n",(instr->opcode));
 		printf("\nrtrn : %X\n",rtrn);
 		printf("\nhex : %d\n",hex);
+	}
+	if(type=='S'){
+		rtrn=hex;
+		rtrn+=(registerToInt(instr->op1)<<11); // ajout de rd
+		rtrn+=(registerToInt(instr->op2)<<16);
+		rtrn+=(immediateToInt(instr->op3)<<6);
+		rtrn+=1<<21;
+		printf("au debut:%x",(rtrn));
 	}
 	return (rtrn);
 }

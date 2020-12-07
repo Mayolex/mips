@@ -5,7 +5,7 @@ On transforme une instruction en numinstruction
 */
 numinstruction *readinstr(unsigned int addr,memory_struct *mem){
     unsigned int valinstr = rw(mem,addr);
-    printf("valinstr : %X\n",valinstr);
+    printf("La valeur de l'instruction a l'entrée de la fonction readistnr: %x\n",valinstr);
     numinstruction *instr=malloc(sizeof(numinstruction));
     if(valinstr>>26==0){//cas des instructions de type registre et F
         instr->op=valinstr&0x3F;
@@ -14,6 +14,7 @@ numinstruction *readinstr(unsigned int addr,memory_struct *mem){
         instr->rd=(valinstr>>11)&0x1F;
         instr->sa=(valinstr>>6)&0x1F;
         instr->type=2;
+        printf("%d %d %d %d %d",instr->op,instr->rs,instr->rt,instr->rd);
     }
     else if((valinstr>>26)<=3){//cas des instructions de type Jump
         instr->op=valinstr>>26;
@@ -80,24 +81,25 @@ void LUI(numinstruction *lui,register_struct *reg){
 void LW(numinstruction *Lw,register_struct *reg,memory_struct *mem){
     lw(mem,reg,Lw->rs,Lw->rt,Lw->immediate);
 }
-//fin fonctions testées
 void MFHI(numinstruction *mfhi,register_struct *reg){
     wr(reg,mfhi->rd,reg->registers[HI]);
-    printf("\non rentre\n");
 }
 void MFLO(numinstruction *mflo,register_struct *reg){
     wr(reg,mflo->rd,reg->registers[LO]);
 }
 void MULT(numinstruction *mult,register_struct *reg){
-    wr(reg,LO,(reg->registers[mult->rs]*reg->registers[mult->rt])&0x0000FFFF);
-    wr(reg,HI,(reg->registers[mult->rs]*reg->registers[mult->rt])&0xFFFF0000);
+    long int entier =(reg->registers[mult->rs]*reg->registers[mult->rt]);
+    wr(reg,LO,(reg->registers[mult->rs]*reg->registers[mult->rt])&0xffffffff);
+    wr(reg,HI,(entier>>32)&0xffffffff);
 }
 void NOP(numinstruction *nop,register_struct *reg){
     ;//ou SLL r0 r0 0;
 }
 void OR(numinstruction *or,register_struct *reg){
+    printf(" %x",or->rs);
     wr(reg,or->rd,(reg->registers[or->rs] | reg->registers[or->rt]));
 }
+//fin fonctions testées bon, en fait voila. il se passe qu'en fait, y'a un probleme entre le moment ou avant qu'on rentre dans readinstr et après le moment ou on rentre dans readinst ;) a la prochaine ;) ;) 
 void ROTR(numinstruction *rotr,register_struct *reg){
     int i=0,tmp=0;
     while(i<rotr->sa){
@@ -176,8 +178,8 @@ void operation(numinstruction *instr,register_struct *reg, memory_struct *mem){
                 J(instr,reg);
             }
             else if(instr->type==2){
+                //SRL(instr,reg);//?
                 ROTR(instr,reg);
-                SRL(instr,reg);//?
             }
             break;
         case 0x03://JAL

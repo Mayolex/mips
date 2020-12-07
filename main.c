@@ -26,29 +26,28 @@ int main(int argc, char *argv[]){
 }*/
 int main(){
 	long unsigned int kappa;
-	instruction *lul=cut_instruction("ADD $5 $3 $2");
+	instruction *lul=cut_instruction("ROTR $4 $2 1");
     memory_struct mem;
     register_struct regs;
     numinstruction *instr;
-
+    printf("%s %s %s %s",lul->opcode,lul->op1,lul->op2,lul->op3);
 	kappa=translate_instruction(lul,"instructiontohex.txt");
+    printf("l'instruction: %X",kappa);
     regs.registers[0]=kappa; 
     regs.registers[1]=0; //charge l'adresse 0
-    regs.registers[2]=4;
-    regs.registers[3]=4;
-    regs.registers[7]=8;
+    regs.registers[2]=2;
+    regs.registers[3]=2;
+    /*regs.registers[7]=8;
+    regs.registers[LO]=10;
     regs.registers[GP]=8;
-    regs.registers[HI]=76;
     regs.registers[LO]=0;
-    regs.registers[RA]=16;
-    instr=readinstr(0,&mem);
+    regs.registers[RA]=16;*/
     sw(&mem,&regs,1,0,0); //charge l'instruction a l'adresse 0
     sw(&mem,&regs,2,3,0);
-    printf("\nopcode : %X\n",instr->op);
-    printf("\nkappa : %X\n",kappa);
-    printf("\nrw(0) : %X",rw(&mem,0));
+    instr=readinstr(0,&mem);
+    
     operation(instr,&regs,&mem);
     printRegisters(&regs);
-    printMemory(&mem);
+    //printMemory(&mem);
     return(0);
 }

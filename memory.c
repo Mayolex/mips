@@ -24,10 +24,11 @@ void sw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int i
 }
 int rw(memory_struct *mem_struct,unsigned int addr){
     int rtrn=0;
-    rtrn=mem_struct->memory[addr];
-    rtrn+=mem_struct->memory[addr+1]<<8;
-    rtrn+=mem_struct->memory[addr+2]<<16;
-    rtrn+=mem_struct->memory[addr+3]<<24;
+    int addr2 = addr;
+    rtrn=mem_struct->memory[addr2]&0xFF;
+    rtrn+=(mem_struct->memory[addr2+1]&0xFF)<<8;
+    rtrn+=(mem_struct->memory[addr2+2]&0xFF)<<16;
+    rtrn+=(mem_struct->memory[addr2+3]&0xFF)<<24;
     return(rtrn);
 }
 void wr(register_struct *reg_struct,int reg,unsigned int value){
