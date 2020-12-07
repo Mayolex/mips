@@ -32,7 +32,6 @@ instruction * cut_instruction(char  string[]){
 				default:
 					break;
 			}
-			
 		}
 		else{
 			n=i+1;
@@ -52,6 +51,7 @@ int registerToInt(char reg[]){
 	if(reg[0]=='$'){
 		rtrn=valeurDecimale(&reg[1]);
 	}
+	printf("\nrtrn : %X\n", rtrn);
 	return(rtrn&31);
 }
 /*
@@ -128,6 +128,14 @@ long unsigned int translate_instruction(instruction * instr, char* instrFile){
 		rtrn=(hex<<26);
 		rtrn+=(registerToInt(instr->op1)<<16); // ajout de rt
 		rtrn+=(immediateToInt(instr->op2));// ajout de la valeur immédiate
+	}
+	if(type=='F'){
+		rtrn=hex;
+		rtrn+=(registerToInt(instr->op1)<<11); // ajout de rd
+		printf("\nop1 : %s\n",(instr->op1));
+		printf("\nopcode : %s\n",(instr->opcode));
+		printf("\nrtrn : %X\n",rtrn);
+		printf("\nhex : %d\n",hex);
 	}
 	return (rtrn);
 }

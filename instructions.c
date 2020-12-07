@@ -5,8 +5,9 @@ On transforme une instruction en numinstruction
 */
 numinstruction *readinstr(unsigned int addr,memory_struct *mem){
     unsigned int valinstr = rw(mem,addr);
+    printf("valinstr : %X\n",valinstr);
     numinstruction *instr=malloc(sizeof(numinstruction));
-    if(valinstr>>26==0){//cas des instructions de type registre
+    if(valinstr>>26==0){//cas des instructions de type registre et F
         instr->op=valinstr&0x3F;
         instr->rs=(valinstr>>21)&0x1F;
         instr->rt=(valinstr>>16)&0x1F;
@@ -82,6 +83,7 @@ void LW(numinstruction *Lw,register_struct *reg,memory_struct *mem){
 //fin fonctions testées
 void MFHI(numinstruction *mfhi,register_struct *reg){
     wr(reg,mfhi->rd,reg->registers[HI]);
+    printf("\non rentre\n");
 }
 void MFLO(numinstruction *mflo,register_struct *reg){
     wr(reg,mflo->rd,reg->registers[LO]);
@@ -139,12 +141,11 @@ void XOR(numinstruction *xor,register_struct *reg){
 }
 
 void operation(numinstruction *instr,register_struct *reg, memory_struct *mem){
-    switch(instr->op){
+        switch(instr->op){
         case 0x20://ADD
             ADD(instr,reg);
             break;
         case 0x08://ADDI ou JR
-        printf("on rentre ici %d",instr->type);
             if(instr->type==0){
                 ADDI(instr,reg);
             }
