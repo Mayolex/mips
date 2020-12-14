@@ -3,9 +3,8 @@
 /*
 On transforme une instruction en numinstruction
 */
-numinstruction *readinstr(unsigned int addr,memory_struct *mem){
+numinstruction *readinstr(int addr,memory_struct *mem){
     unsigned int valinstr = rw(mem,addr);
-    printf("La valeur de l'instruction a l'entrée de la fonction readistnr: %x\n",valinstr);
     numinstruction *instr=malloc(sizeof(numinstruction));
     if(valinstr>>26==0){//cas des instructions de type registre et F
         instr->op=valinstr&0x3F;
@@ -14,7 +13,6 @@ numinstruction *readinstr(unsigned int addr,memory_struct *mem){
         instr->rd=(valinstr>>11)&0x1F;
         instr->sa=(valinstr>>6)&0x1F;
         instr->type=2;
-        printf("%d %d %d %d %d",instr->op,instr->rs,instr->rt,instr->rd);
     }
     else if((valinstr>>26)<=3){//cas des instructions de type Jump
         instr->op=valinstr>>26;

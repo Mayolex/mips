@@ -21,13 +21,12 @@ void sw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int i
         mem_struct->memory[reg_struct->registers[indbase]+offset+3]=((reg_struct->registers[indrt])>>24)&0xFF;
     }
 }
-int rw(memory_struct *mem_struct,unsigned int addr){
+int rw(memory_struct *mem_struct,int addr){
     int rtrn=0;
-    int addr2 = addr;
-    rtrn=mem_struct->memory[addr2]&0xFF;
-    rtrn+=(mem_struct->memory[addr2+1]&0xFF)<<8;
-    rtrn+=(mem_struct->memory[addr2+2]&0xFF)<<16;
-    rtrn+=(mem_struct->memory[addr2+3]&0xFF)<<24;
+    rtrn=mem_struct->memory[addr]&0xFF;
+    rtrn+=(mem_struct->memory[addr+1]&0xFF)<<8;
+    rtrn+=(mem_struct->memory[addr+2]&0xFF)<<16;
+    rtrn+=(mem_struct->memory[addr+3]&0xFF)<<24;
     return(rtrn);
 }
 void swi(memory_struct *mem_struct,int ind,long unsigned int value){

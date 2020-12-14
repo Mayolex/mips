@@ -20,7 +20,7 @@ struct numinstruction{
 };
 
 /* renvoit une instruction depuis une instruction stockée en mémoire à l'adresse donnée */
-numinstruction *readinstr(unsigned int addr,memory_struct *mem);
+numinstruction *readinstr(int addr,memory_struct *mem);
 
 void operation(numinstruction *instr,register_struct *reg, memory_struct *mem);
 

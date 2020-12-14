@@ -20,7 +20,7 @@ void lw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int i
 void sw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int indrt, short int offset);
 //inserer directement une valeur dans la mémoire sans passer par des registres
 void swi(memory_struct *mem_struct,int ind,long unsigned int value);
-int rw(memory_struct *mem_struct,unsigned int addr);
+int rw(memory_struct *mem_struct,int addr);
 void wr(register_struct *reg_struct,int reg,unsigned int value);
 void printRegisters(register_struct *reg_struct);
 void printMemory(memory_struct *memory_struct);

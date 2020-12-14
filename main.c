@@ -18,12 +18,13 @@ int main(int argc, char *argv[]){
 	return 0;
 }*/
 int main(){
+    interprete("tests/in2.txt",1);/*
     memory_struct mem;
     register_struct regs;
     init_mem(&mem);
     loadmemory(&mem,"tests/in2.txt");
     
-	/*long unsigned int kappa;
+	long unsigned int kappa;
 	instruction *lul=cut_instruction("ROTR $4 $2 1");
     numinstruction *instr;
     printf("%s %s %s %s",lul->opcode,lul->op1,lul->op2,lul->op3);
@@ -40,10 +41,10 @@ int main(){
     regs.registers[RA]=16;
     sw(&mem,&regs,1,0,0); //charge l'instruction a l'adresse 0
     sw(&mem,&regs,2,3,0);
-    instr=readinstr(0,&mem);*/
+    instr=readinstr(0,&mem);
     
     //operation(instr,&regs,&mem);
     printRegisters(&regs);
-    printMemory(&mem);
+    printMemory(&mem);*/
     return(0);
 }

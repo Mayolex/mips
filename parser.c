@@ -47,7 +47,6 @@ int registerToInt(char reg[]){
 	if(reg[0]=='$'){
 		rtrn=valeurDecimale(&reg[1]);
 	}
-	printf("\nrtrn : %d\n", rtrn);
 	return(rtrn&31);
 }
 /*
@@ -128,10 +127,6 @@ long unsigned int translate_instruction(instruction * instr, char* instrFile){
 	if(type=='F'){
 		rtrn=hex;
 		rtrn+=(registerToInt(instr->op1)<<11); // ajout de rd
-		printf("\nop1 : %s\n",(instr->op1));
-		printf("\nopcode : %s\n",(instr->opcode));
-		printf("\nrtrn : %X\n",rtrn);
-		printf("\nhex : %d\n",hex);
 	}
 	if(type=='S'){
 		rtrn=hex;
@@ -139,7 +134,6 @@ long unsigned int translate_instruction(instruction * instr, char* instrFile){
 		rtrn+=(registerToInt(instr->op2)<<16);
 		rtrn+=(immediateToInt(instr->op3)<<6);
 		rtrn+=1<<21;
-		printf("au debut:%x",(rtrn));
 	}
 	return (rtrn);
 }
@@ -213,7 +207,6 @@ void transformeTotal(char *fichierALire, char *fichierAEcrire){
 		mange_blanc(instr);
 		mettreEnMajuscule(instr);
         a = cut_instruction(instr);
-		printf("instruction coupé : opcode: %s op1:%s op2: %s op3: %s  \n",a->opcode,a->op1,a->op2,a->op3);
         aEcrire = translate_instruction(a,"instructiontohex.txt");
 		instrliste[i]=aEcrire;
 		i++;
@@ -221,18 +214,6 @@ void transformeTotal(char *fichierALire, char *fichierAEcrire){
 	fclose(readFile);
 	ecrit_fichier(fichierAEcrire,instrliste,i);
 	
-}
-
-long unsigned int stepByStepTrans(){
-	char instr[100];
-	instruction *instr_cut;
-	long unsigned int ans;
-    fscanf(stdin, "%s", &instr);
-    mange_blanc(instr);
-	mettreEnMajuscule(instr);
-	instr_cut=cut_instruction(instr);
-	ans=translate_instruction(instr_cut,"instructiontohex.txt");
-	return (ans);
 }
 
 void loadmemory(memory_struct *mem,char *fichierALire){
@@ -246,17 +227,12 @@ void loadmemory(memory_struct *mem,char *fichierALire){
         perror("erreur a l'ouverture du fichier à lire : il n'existe peut-être pas\n");
         exit(1);
     }
-
-
-
     while(!feof(readFile)){
         lit_fichier(readFile,instr);
 		mange_blanc(instr);
 		mettreEnMajuscule(instr);
         a = cut_instruction(instr);
-		printf("instruction coupé : opcode: %s op1:%s op2: %s op3: %s  \n",a->opcode,a->op1,a->op2,a->op3);
         aEcrire = translate_instruction(a,"instructiontohex.txt");
-		printf("\na ecrire:%x %d\n",aEcrire,i);
 		swi(mem,4*i,aEcrire);
 		i++;
 	}
