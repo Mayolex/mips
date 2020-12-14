@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+
 #include "memory.h"
 
 
@@ -31,6 +30,14 @@ int rw(memory_struct *mem_struct,unsigned int addr){
     rtrn+=(mem_struct->memory[addr2+3]&0xFF)<<24;
     return(rtrn);
 }
+void swi(memory_struct *mem_struct,int ind,long unsigned int value){
+    mem_struct->memory[ind]=value&0xFF;
+    mem_struct->memory[ind+1]=((value)>>8)&0xFF;
+    mem_struct->memory[ind+2]=((value)>>16)&0xFF;
+    mem_struct->memory[ind+3]=((value)>>24)&0xFF;
+}
+
+
 void wr(register_struct *reg_struct,int reg,unsigned int value){
     if(reg!=0 && reg!=26 && reg!=27 &&reg!=30){
         reg_struct->registers[reg]=value;
@@ -79,7 +86,7 @@ void printMemory(memory_struct *mem){
 void init_mem(memory_struct *mem){
     int i=0;
     for(i=0;i<LENGH;i++){
-        mem->memory[i]='0';
+        mem->memory[i]=0;
     }
 }
 

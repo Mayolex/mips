@@ -1,9 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
 #include "parser.h"
-#include "moduletp4.h"
+
 
 
 /*
@@ -237,4 +233,32 @@ long unsigned int stepByStepTrans(){
 	instr_cut=cut_instruction(instr);
 	ans=translate_instruction(instr_cut,"instructiontohex.txt");
 	return (ans);
+}
+
+void loadmemory(memory_struct *mem,char *fichierALire){
+	int i=0;
+	long unsigned int instrliste[100];
+	char instr[100];
+	long unsigned int aEcrire;
+	instruction *a;
+    FILE *readFile=fopen(fichierALire,"r");
+    if(readFile == NULL){/*test ouverture fichier*/
+        perror("erreur a l'ouverture du fichier à lire : il n'existe peut-être pas\n");
+        exit(1);
+    }
+
+
+
+    while(!feof(readFile)){
+        lit_fichier(readFile,instr);
+		mange_blanc(instr);
+		mettreEnMajuscule(instr);
+        a = cut_instruction(instr);
+		printf("instruction coupé : opcode: %s op1:%s op2: %s op3: %s  \n",a->opcode,a->op1,a->op2,a->op3);
+        aEcrire = translate_instruction(a,"instructiontohex.txt");
+		printf("\na ecrire:%x %d\n",aEcrire,i);
+		swi(mem,4*i,aEcrire);
+		i++;
+	}
+
 }

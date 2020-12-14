@@ -1,3 +1,8 @@
+#ifndef PARSER_H
+#define PARSER_H
+#include "main.h"
+#include <stdio.h>
+
 #define TAILLEOP 10
 
 typedef struct instruction instruction;
@@ -20,3 +25,7 @@ void lit_fichier(FILE *readFile, char *instr);
 char *mange_blanc(char *instr);
 void transformeTotal(char *fichierALire, char *fichierAEcrire);
 long unsigned int stepByStepTrans();
+void loadmemory(memory_struct *mem,char *fichierALire);
+
+
+#endif

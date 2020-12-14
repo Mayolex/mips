@@ -1,6 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "memory.h"
+#ifndef INSTRUCTION_H
+#define INSTRUCTION_H
+#include "main.h"
+
 #define LO 32
 #define HI 33
 #define GP 28
@@ -48,3 +49,5 @@ void SUB(numinstruction *sub,register_struct *reg);
 void SW(numinstruction *sw,register_struct *reg,memory_struct *mem);
 void SYSCALL(numinstruction *syscall,register_struct *reg);
 void XOR(numinstruction *xor,register_struct *reg);
+
+#endif
