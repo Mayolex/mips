@@ -23,7 +23,8 @@ void lit_ligne(FILE *fichier,int offset_ligne){
         fgets(before,100,fichier);
     }
     fgets(before,100,fichier);
-    printf("%s", before);
+    printf("instruction entrée : %s", before);
+    printf("traduction hexadécimale : %lu\n\n", translate_instruction(cut_instruction(before),"instructiontohex.txt"));
 }
 
 
@@ -64,7 +65,61 @@ int step_by_step(memory_struct *mem, register_struct *reg, char *fichier_instr){
     return quit;
 }
 
+void interactif(){
+    memory_struct mem_vol;
+    memory_struct mem;
+    register_struct reg;
+    init_mem(&mem);
+    init_mem(&mem_vol);
+    init_reg(&reg);
+    int quit=0;
+    char instruct[100];
+    long unsigned int instr_hex;
+    instruction *instr;
+    numinstruction *numinstr;
+    while(quit!=1){
+        printf("donnez votre instruction (EXIT pour quitter) : ");
+        fgets(instruct,100,stdin);
+        if(strcmp(instruct,"EXIT\n")==0){
+            quit=1;
+        }
+        else{
+            mange_blanc(instruct);
+            mettreEnMajuscule(instruct);
+            instr=cut_instruction(instruct);
+            if(strcmp(instr->opcode,"ADD")
+                && strcmp(instr->opcode,"ADDI")
+                && strcmp(instr->opcode,"AND")
+                && strcmp(instr->opcode,"DIV")
+                && strcmp(instr->opcode,"LUI")
+                && strcmp(instr->opcode,"LW")
+                && strcmp(instr->opcode,"MFHI")
+                && strcmp(instr->opcode,"MFLO")
+                && strcmp(instr->opcode,"MULT")
+                && strcmp(instr->opcode,"NOP")
+                && strcmp(instr->opcode,"OR")
+                && strcmp(instr->opcode,"XOR")
+                && strcmp(instr->opcode,"ROTR")
+                && strcmp(instr->opcode,"SYSCALL")
+                && strcmp(instr->opcode,"SLL")
+                && strcmp(instr->opcode,"SLT")
+                && strcmp(instr->opcode,"SRL")
+                && strcmp(instr->opcode,"SUB")
+                && strcmp(instr->opcode,"SW")){
+                printf("instruction incorrecte\n");
+            }
+            else{
+                instr_hex=translate_instruction(instr,"instructiontohex.txt");
+                swi(&mem_vol,0,instr_hex);
+                numinstr=readinstr(0,&mem_vol);
+                operation(numinstr,&reg,&mem);
 
+                printMemory(&mem);
+                printRegisters(&reg);
+            }
+        }
+    }
+}
 
 
 
@@ -80,16 +135,14 @@ void interprete(char fichier[],int step){
     loadmemory(&mem,fichier);
 
     while(rw(&mem,reg.registers[GP])!=0 && quit!=1){
-        instruct=readinstr((&mem,reg.registers[GP]),&mem);
+        instruct=readinstr(reg.registers[GP],&mem);
         operation(instruct,&reg,&mem);
         wr(&reg,GP,reg.registers[GP]+4);
         if(step==1){
             quit=step_by_step(&mem,&reg,fichier);
         }
     }
-    if(step!=1){
-        printMemory(&mem);
-        printRegisters(&reg);
-    }
+    printMemory(&mem);
+    printRegisters(&reg);
 }
 #endif

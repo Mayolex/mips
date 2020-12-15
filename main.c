@@ -2,23 +2,28 @@
 /*
 tests/in2.txt->traduction->out_hex.txt
 */
-/*
+
 int main(int argc, char *argv[]){
-    if(argc==3){//on vérifie le nombre d'arguments
-        transformeTotal(argv[1],argv[2]);//on utilise les deuxième et troisième arguments
+    if(argc==1){
+        interactif();
     }
-    else if(argc==1){
-        
-        //operation(stepByStep(),&regs,&mem);
-        //printRegisters(&regs);
+    else if(argc==2){//on vérifie le nombre d'arguments
+        interprete(argv[1],0);
+    }
+    else if(argc==3){
+        if(strcmp(argv[2],"-pas")==0){
+            interprete(argv[1],1);
+        }
+        else{
+            printf("\n%s n'est pas reconnu\n",argv[2]);
+        }
     }
     else{
         printf("Erreur dans les options\nEssayez quelque chose de la forme :\n        ./exe [nom du fichier a lire] [nom du fichier où écrire]\n");
     }
 	return 0;
-}*/
-int main(){
-    interprete("tests/in2.txt",1);/*
+}/*
+int main(int argc,char *argv[]){
     memory_struct mem;
     register_struct regs;
     init_mem(&mem);
@@ -45,6 +50,6 @@ int main(){
     
     //operation(instr,&regs,&mem);
     printRegisters(&regs);
-    printMemory(&mem);*/
+    printMemory(&mem);
     return(0);
-}
+}*/
