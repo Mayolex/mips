@@ -97,18 +97,19 @@ void OR(numinstruction *or,register_struct *reg){
     printf(" %x",or->rs);
     wr(reg,or->rd,(reg->registers[or->rs] | reg->registers[or->rt]));
 }
-//fin fonctions testées bon, en fait voila. il se passe qu'en fait, y'a un probleme entre le moment ou avant qu'on rentre dans readinstr et après le moment ou on rentre dans readinst ;) a la prochaine ;) ;) 
 void ROTR(numinstruction *rotr,register_struct *reg){
     int i=0,tmp=0;
-    while(i<rotr->sa){
-        tmp=((rotr->rt)&1)+tmp;
-        tmp*=2;
-        (rotr->rt)>>1;
-        i++;
-    }
-    (rotr->rt)>>(rotr->sa);
-    rotr->rd=(rotr->rt)|(tmp);
+    printf("on rentre dedans ?\n%d\n\n",reg->registers[rotr->rt]);
+    tmp=(reg->registers[rotr->rt])&((1<<rotr->sa+1)-1);
+    printf("%d\n",tmp);
+    wr(reg,rotr->rd,(reg->registers[rotr->rt])/(1<<(rotr->sa)));
+    printf("shift : %d\n",24&(1<<(rotr->sa)));
+    printf("shift : %d\n",(tmp));
+    printf("%d\n",reg->registers[rotr->rd]);
+    wr(reg,rotr->rd,reg->registers[rotr->rd]+tmp*(1<<32-(rotr->sa)));
+    printf("%d\n",reg->registers[rotr->rd]);
 }
+//fin fonctions testées mais des tests supplémentaires au dessus c'est bien aussi 
 void SLL(numinstruction *sll,register_struct *reg){
     (sll->rt)<<(sll->sa);
     sll->rd=sll->rt;
@@ -176,8 +177,12 @@ void operation(numinstruction *instr,register_struct *reg, memory_struct *mem){
                 J(instr,reg);
             }
             else if(instr->type==2){
-                //SRL(instr,reg);//?
-                ROTR(instr,reg);
+                if(instr->rs==1){
+                    ROTR(instr,reg);
+                }
+                else{
+                    SRL(instr,reg);
+                }
             }
             break;
         case 0x03://JAL

@@ -131,9 +131,14 @@ long unsigned int translate_instruction(instruction * instr, char* instrFile){
 	if(type=='S'){
 		rtrn=hex;
 		rtrn+=(registerToInt(instr->op1)<<11); // ajout de rd
-		rtrn+=(registerToInt(instr->op2)<<16);
+		rtrn+=(registerToInt(instr->op2)<<16);//ajout de rt
 		rtrn+=(immediateToInt(instr->op3)<<6);
-		rtrn+=1<<21;
+		if(!strcmp(instr->opcode,"ROTR")){
+			rtrn+=1<<21;
+		}
+		else{
+			rtrn+=0<<21;
+		}
 	}
 	return (rtrn);
 }

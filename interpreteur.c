@@ -80,7 +80,7 @@ void interactif(){
     while(quit!=1){
         printf("donnez votre instruction (EXIT pour quitter) : ");
         fgets(instruct,100,stdin);
-        if(strcmp(instruct,"EXIT\n")==0){
+        if(strcmp(instruct,"EXIT\n")==0 || strcmp(instruct,"exit\n")==0){
             quit=1;
         }
         else{
