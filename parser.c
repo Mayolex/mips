@@ -73,8 +73,7 @@ long int targetToInt(char targ[]){
 Reçoit une instruction de type instruction (instruction découpée)
 Lit l'opcode d'une instruction dans un fichier
 Traduit l'instruction complète en fonction de son type en hexadécimal
-Ecrit dans un fichier de sortie l'instruction reconstituée traduite
-Ne retourne rien
+Retourne la traduction
 */
 long unsigned int translate_instruction(instruction * instr, char* instrFile){
 	char instrname[TAILLEOP];
