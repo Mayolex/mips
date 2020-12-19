@@ -105,14 +105,8 @@ void ROTR(numinstruction *rotr,register_struct *reg){
     wr(reg,rotr->rd,(reg->registers[rotr->rt])/(1<<(rotr->sa)));
     wr(reg,rotr->rd,reg->registers[rotr->rd]+tmp*(1<<32-(rotr->sa)));
 }
-//fin fonctions testées mais des tests supplémentaires au dessus c'est bien aussi 
 void SLL(numinstruction *sll,register_struct *reg){
-    //(reg->registers[sll->rt])<<(reg->registers[sll->sa]);
-    //reg->registers[sll->rd]=reg->registers[sll->rt];
-    //wr(reg,sll->rd,reg->registers[sll->rt]);
-    int decalage=(((*reg).registers[(*sll).rt])<<((*reg).registers[(*sll).sa]));
-    printf("%d",decalage);
-    wr(reg,sll->rd,((reg->registers[sll->rt])<<(sll->sa)));
+   wr(reg,sll->rd,(reg->registers[sll->rt])<<(sll->sa));
 }
 void SLT(numinstruction *slt,register_struct *reg){
     if((reg->registers[slt->rs])<(reg->registers[slt->rt])){
@@ -123,6 +117,7 @@ void SLT(numinstruction *slt,register_struct *reg){
     }
 }
 void SRL(numinstruction *srl,register_struct *reg){
+    printf("Sa: %d",srl->sa);
     wr(reg,srl->rd,(reg->registers[srl->rt])>>(srl->sa));
 }
 void SUB(numinstruction *sub,register_struct *reg){
@@ -138,6 +133,7 @@ void XOR(numinstruction *xor,register_struct *reg){
     int res=(reg->registers[xor->rs])^(reg->registers[xor->rt]);
     wr(reg,xor->rd,res);
 }
+//fin fonctions testées mais des tests supplémentaires au dessus c'est bien aussi 
 
 /*
 choix de l'opération en fonction de l'instruction
