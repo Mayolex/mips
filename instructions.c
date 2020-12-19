@@ -29,6 +29,9 @@ numinstruction *readinstr(int addr,memory_struct *mem){
     return(instr);
 }
 
+/*
+suite de fonctions claires, de base du processeur
+*/
 void ADD(numinstruction *add,register_struct *reg){
     wr(reg,add->rd,(reg->registers[add->rs])+(reg->registers[add->rt]));
 }
@@ -40,38 +43,37 @@ void AND(numinstruction *and,register_struct *reg){
 }
 void BEQ(numinstruction *beq,register_struct *reg){
     if((reg->registers[beq->rs])==(reg->registers[beq->rt])){
-        wr(reg,GP,(beq->immediate)-4);//pas sûr pour le -4
+        wr(reg,GP,reg->registers[GP]+=(beq->immediate));//pas sûr pour le -4
     }
 }
 void BGTZ(numinstruction *bgtz,register_struct *reg){
     if((reg->registers[bgtz->rs])>0){
-        wr(reg,GP,(bgtz->immediate)-4);
+        wr(reg,GP,reg->registers[GP]+=(bgtz->immediate));
     }
 }
 void BLEZ(numinstruction *blez,register_struct *reg){
     if((reg->registers[blez->rs])<=0){
-        wr(reg,GP,(blez->immediate)-4);
+        wr(reg,GP,reg->registers[GP]+=(blez->immediate));
     }
 }
 void BNE(numinstruction *bne,register_struct *reg){
     if((reg->registers[bne->rs])!=(reg->registers[bne->rt])){
-        wr(reg,GP,(bne->immediate)-4);
+        wr(reg,GP,reg->registers[GP]+=(bne->immediate));
     }
 }
-                                                                                                    //void wr(register_struct *reg_struct, int reg, unsigned int value);
 void DIV(numinstruction *div,register_struct *reg){
     wr(reg,LO,((reg->registers[div->rs])/(reg->registers[div->rt])));
     wr(reg,HI,((reg->registers[div->rs])%(reg->registers[div->rt])));
 }
 void J(numinstruction *j,register_struct *reg){
-    wr(reg,GP,(j->target)-4);
+    wr(reg,GP,(j->target));
 }
 void JAL(numinstruction *jal,register_struct *reg){
     wr(reg,RA,reg->registers[GP]);
     J(jal,reg);
 }
 void JR(numinstruction *jr,register_struct *reg){
-    wr(reg,GP,(reg->registers[RA])-4);
+    wr(reg,GP,(reg->registers[RA]));
 }
 void LUI(numinstruction *lui,register_struct *reg){
     wr(reg,lui->rt,(lui->immediate)<<16);
@@ -98,24 +100,22 @@ void OR(numinstruction *or,register_struct *reg){
     wr(reg,or->rd,(reg->registers[or->rs] | reg->registers[or->rt]));
 }
 void ROTR(numinstruction *rotr,register_struct *reg){
-    int i=0,tmp=0;
-    printf("on rentre dedans ?\n%d\n\n",reg->registers[rotr->rt]);
+    int tmp=0;
     tmp=(reg->registers[rotr->rt])&((1<<rotr->sa+1)-1);
-    printf("%d\n",tmp);
     wr(reg,rotr->rd,(reg->registers[rotr->rt])/(1<<(rotr->sa)));
-    printf("shift : %d\n",24&(1<<(rotr->sa)));
-    printf("shift : %d\n",(tmp));
-    printf("%d\n",reg->registers[rotr->rd]);
     wr(reg,rotr->rd,reg->registers[rotr->rd]+tmp*(1<<32-(rotr->sa)));
-    printf("%d\n",reg->registers[rotr->rd]);
 }
 //fin fonctions testées mais des tests supplémentaires au dessus c'est bien aussi 
 void SLL(numinstruction *sll,register_struct *reg){
-    (sll->rt)<<(sll->sa);
-    sll->rd=sll->rt;
+    //(reg->registers[sll->rt])<<(reg->registers[sll->sa]);
+    //reg->registers[sll->rd]=reg->registers[sll->rt];
+    //wr(reg,sll->rd,reg->registers[sll->rt]);
+    int decalage=(((*reg).registers[(*sll).rt])<<((*reg).registers[(*sll).sa]));
+    printf("%d",decalage);
+    wr(reg,sll->rd,((reg->registers[sll->rt])<<(sll->sa)));
 }
 void SLT(numinstruction *slt,register_struct *reg){
-    if((slt->rs)<(slt->rt)){
+    if((reg->registers[slt->rs])<(reg->registers[slt->rt])){
         wr(reg,slt->rd,1);
     }
     else{
@@ -123,8 +123,7 @@ void SLT(numinstruction *slt,register_struct *reg){
     }
 }
 void SRL(numinstruction *srl,register_struct *reg){
-    (srl->rt)>>(srl->sa);
-    srl->rd=srl->rt;
+    wr(reg,srl->rd,(reg->registers[srl->rt])>>(srl->sa));
 }
 void SUB(numinstruction *sub,register_struct *reg){
     wr(reg,sub->rd,(reg->registers[sub->rs])-(reg->registers[sub->rt]));
@@ -133,14 +132,17 @@ void SW(numinstruction *Sw,register_struct *reg,memory_struct *mem){
     sw(mem,reg,Sw->rs,Sw->rt,Sw->immediate);
 }
 void SYSCALL(numinstruction *syscall,register_struct *reg){
-    ;//?
+    printf("SYSCALL\n");
 }
 void XOR(numinstruction *xor,register_struct *reg){
-    int res=(xor->rs)|(xor->rt);
-    res%=2;
+    int res=(reg->registers[xor->rs])^(reg->registers[xor->rt]);
     wr(reg,xor->rd,res);
 }
 
+/*
+choix de l'opération en fonction de l'instruction
+lien instruction exécution
+*/
 void operation(numinstruction *instr,register_struct *reg, memory_struct *mem){
         switch(instr->op){
         case 0x20://ADD

@@ -15,6 +15,10 @@ void viderBuffer()
     }
 }
 
+/*
+fonction pour le mode interactif 
+lit une ligne du fichier texte
+*/
 void lit_ligne(FILE *fichier,int offset_ligne){
     int i;
     char before[100];
@@ -27,9 +31,10 @@ void lit_ligne(FILE *fichier,int offset_ligne){
     printf("traduction hexadécimale : %lu\n\n", translate_instruction(cut_instruction(before),"instructiontohex.txt"));
 }
 
-
-
-
+/*
+gère le mode pas à pas
+on donne 5 choix à l'utilisatur, on agit en conséquence
+*/
 int step_by_step(memory_struct *mem, register_struct *reg, char *fichier_instr){
     int ans=-1,quit=0;
     char *instr;
@@ -46,18 +51,18 @@ int step_by_step(memory_struct *mem, register_struct *reg, char *fichier_instr){
             printf("mauvais paramètre\n");
         }
         switch(ans){
-            case 1:
+            case 1://exécute l'instruction suivante
                 break;
-            case 2:
+            case 2://affiche la mémoire
                 printMemory(mem);
                 break;
-            case 3:
+            case 3://affiche les registres
                 printRegisters(reg);
                 break;
-            case 4:
+            case 4://affiche l'instruction
                 lit_ligne(fichier,reg->registers[GP]);
                 break;
-            case 5:
+            case 5://quitte
                 quit=1;
                 break;
         }
@@ -65,6 +70,10 @@ int step_by_step(memory_struct *mem, register_struct *reg, char *fichier_instr){
     return quit;
 }
 
+/*
+gère le mode interactif
+certaines fonctions sont indisponibles car on ne gère pas la mémoire
+*/
 void interactif(){
     memory_struct mem_vol;
     memory_struct mem;
@@ -122,7 +131,10 @@ void interactif(){
 }
 
 
-
+/*
+macro fonction
+récapitule les opérations à effectuer sur un fichier texte pour exécuter les instructions
+*/
 void interprete(char fichier[],int step){
     int quit=0;
     numinstruction *instruct;

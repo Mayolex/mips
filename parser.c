@@ -132,7 +132,7 @@ long unsigned int translate_instruction(instruction * instr, char* instrFile){
 		rtrn=hex;
 		rtrn+=(registerToInt(instr->op1)<<11); // ajout de rd
 		rtrn+=(registerToInt(instr->op2)<<16);//ajout de rt
-		rtrn+=(immediateToInt(instr->op3)<<6);
+		rtrn+=(immediateToInt(instr->op3)<<6);//ajout de sa
 		if(!strcmp(instr->opcode,"ROTR")){
 			rtrn+=1<<21;
 		}
@@ -221,6 +221,9 @@ void transformeTotal(char *fichierALire, char *fichierAEcrire){
 	
 }
 
+/*
+charge les instructions du fichier texte passé en paramètre en mémoire
+*/
 void loadmemory(memory_struct *mem,char *fichierALire){
 	int i=0;
 	long unsigned int instrliste[100];

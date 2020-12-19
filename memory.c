@@ -1,7 +1,10 @@
 
 #include "memory.h"
 
-
+/*
+charge une valeur d'une adresse mémoire contenue dans un registre vers un registre
+un offset peut être ajouté à la valeur du registre
+*/
 void lw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int indrt, short int offset){
     if(indrt<32){
         reg_struct->registers[indrt]=mem_struct->memory[reg_struct->registers[indbase]+offset];
@@ -13,6 +16,10 @@ void lw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int i
   
 }
 
+/*
+charge une valeur d'un registre vers une adresse mémoire contenue dans un registre
+un offset peut être ajouté à la valeur du registre
+*/
 void sw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int indrt, short int offset){
     if(indrt<32){
         mem_struct->memory[reg_struct->registers[indbase]+offset]=reg_struct->registers[indrt]&0xFF;
@@ -21,6 +28,10 @@ void sw(memory_struct *mem_struct,register_struct *reg_struct ,int indbase,int i
         mem_struct->memory[reg_struct->registers[indbase]+offset+3]=((reg_struct->registers[indrt])>>24)&0xFF;
     }
 }
+
+/*
+lit un mot en mémoire mémoire à l'adresse donnée
+*/
 int rw(memory_struct *mem_struct,int addr){
     int rtrn=0;
     rtrn=mem_struct->memory[addr]&0xFF;
@@ -29,6 +40,10 @@ int rw(memory_struct *mem_struct,int addr){
     rtrn+=(mem_struct->memory[addr+3]&0xFF)<<24;
     return(rtrn);
 }
+
+/*
+charge un mot (entier long non signé) en mémoire
+*/
 void swi(memory_struct *mem_struct,int ind,long unsigned int value){
     mem_struct->memory[ind]=value&0xFF;
     mem_struct->memory[ind+1]=((value)>>8)&0xFF;
@@ -36,7 +51,10 @@ void swi(memory_struct *mem_struct,int ind,long unsigned int value){
     mem_struct->memory[ind+3]=((value)>>24)&0xFF;
 }
 
-
+/*
+écrit un entier non signé dans un registre passé en paramètre
+les registres spéciaux sont protégés en écriture
+*/
 void wr(register_struct *reg_struct,int reg,unsigned int value){
     if(reg!=0 && reg!=26 && reg!=27 &&reg!=30){
         reg_struct->registers[reg]=value;
@@ -44,6 +62,9 @@ void wr(register_struct *reg_struct,int reg,unsigned int value){
 
 }
 
+/*
+imprime l'état de la structure des registres passée en paramètre à l'écran
+*/
 void printRegisters(register_struct *reg_struct){
     int i = 0;
     printf("REGISTER STATES:\n\n");
@@ -63,6 +84,9 @@ void printRegisters(register_struct *reg_struct){
 
 }
 
+/*
+imprime l'état de la structure mémoire passée en paramètre à l'écran
+*/
 void printMemory(memory_struct *mem){
         int i = 0;
     printf("Memory STATES:\n\n");
@@ -82,6 +106,9 @@ void printMemory(memory_struct *mem){
 
 }
 
+/*
+initialise les emplecements mémoire à 0
+*/
 void init_mem(memory_struct *mem){
     int i=0;
     for(i=0;i<LENGH;i++){
@@ -89,19 +116,12 @@ void init_mem(memory_struct *mem){
     }
 }
 
+/*
+initialise les registres à 0
+*/
 void init_reg(register_struct *reg){
     int i=0;
     for(i=0;i<NBREG;i++){
         reg->registers[i]=0;
     }
 }
-
-/*int main(){
-    register_struct regs;
-    memory_struct mem;
-    regs.registers[0]=32000;
-    regs.registers[1]=15;//
-    printRegisters(&regs);
-    printMemory(&mem);
-    return (0);
-}*/
