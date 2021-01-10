@@ -2,19 +2,6 @@
 #define INTERPRETE_H
 #include "interpreteur.h"
 
-
-/*
-Vide le buffer
-*/
-void viderBuffer()
-{
-    int c = 0;
-    while (c != '\n' && c != EOF)
-    {
-        c = getchar();
-    }
-}
-
 /*
 fonction pour le mode pas à pas 
 lit une ligne du fichier texte

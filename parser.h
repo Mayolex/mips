@@ -26,6 +26,6 @@ char *mange_blanc(char *instr);
 void transformeTotal(char *fichierALire, char *fichierAEcrire);
 long unsigned int stepByStepTrans();
 void loadmemory(memory_struct *mem,char *fichierALire);
-
+void viderBuffer();
 
 #endif

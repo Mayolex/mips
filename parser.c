@@ -245,3 +245,15 @@ void loadmemory(memory_struct *mem,char *fichierALire){
 	}
 
 }
+
+/*
+Vide le buffer
+*/
+void viderBuffer()
+{
+    int c = 0;
+    while (c != '\n' && c != EOF)
+    {
+        c = getchar();
+    }
+}
