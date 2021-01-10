@@ -31,6 +31,7 @@ numinstruction *readinstr(int addr,memory_struct *mem){
 
 /*
 suite de fonctions claires, de base du processeur
+reg->registers[X] permet de lire la valeur contenue dans le registre X
 */
 void ADD(numinstruction *add,register_struct *reg){
     wr(reg,add->rd,(reg->registers[add->rs])+(reg->registers[add->rt]));
@@ -43,7 +44,7 @@ void AND(numinstruction *and,register_struct *reg){
 }
 void BEQ(numinstruction *beq,register_struct *reg){
     if((reg->registers[beq->rs])==(reg->registers[beq->rt])){
-        wr(reg,GP,reg->registers[GP]+=(beq->immediate));//pas sûr pour le -4
+        wr(reg,GP,reg->registers[GP]+=(beq->immediate));
     }
 }
 void BGTZ(numinstruction *bgtz,register_struct *reg){
@@ -96,7 +97,6 @@ void NOP(numinstruction *nop,register_struct *reg){
     ;//ou SLL r0 r0 0;
 }
 void OR(numinstruction *or,register_struct *reg){
-    printf(" %x",or->rs);
     wr(reg,or->rd,(reg->registers[or->rs] | reg->registers[or->rt]));
 }
 void ROTR(numinstruction *rotr,register_struct *reg){
@@ -117,7 +117,6 @@ void SLT(numinstruction *slt,register_struct *reg){
     }
 }
 void SRL(numinstruction *srl,register_struct *reg){
-    printf("Sa: %d",srl->sa);
     wr(reg,srl->rd,(reg->registers[srl->rt])>>(srl->sa));
 }
 void SUB(numinstruction *sub,register_struct *reg){
@@ -133,7 +132,6 @@ void XOR(numinstruction *xor,register_struct *reg){
     int res=(reg->registers[xor->rs])^(reg->registers[xor->rt]);
     wr(reg,xor->rd,res);
 }
-//fin fonctions testées mais des tests supplémentaires au dessus c'est bien aussi 
 
 /*
 choix de l'opération en fonction de l'instruction

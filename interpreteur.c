@@ -4,7 +4,7 @@
 
 
 /*
-To clear buffer
+Vide le buffer
 */
 void viderBuffer()
 {
@@ -16,7 +16,7 @@ void viderBuffer()
 }
 
 /*
-fonction pour le mode interactif 
+fonction pour le mode pas à pas 
 lit une ligne du fichier texte
 */
 void lit_ligne(FILE *fichier,int offset_ligne){
@@ -33,7 +33,7 @@ void lit_ligne(FILE *fichier,int offset_ligne){
 
 /*
 gère le mode pas à pas
-on donne 5 choix à l'utilisatur, on agit en conséquence
+on donne 5 choix à l'utilisateur, on agit en conséquence
 */
 int step_by_step(memory_struct *mem, register_struct *reg, char *fichier_instr){
     int ans=-1,quit=0;

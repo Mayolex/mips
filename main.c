@@ -1,7 +1,4 @@
 #include "main.h"
-/*
-tests/in2.txt->traduction->out_hex.txt
-*/
 
 int main(int argc, char *argv[]){
     if(argc==1){
